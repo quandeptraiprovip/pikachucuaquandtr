@@ -1,6 +1,7 @@
 #pragma once
 #include<iostream>
 #include<cstring>
+#include<ncurses.h>
 using namespace std;
 
 struct player {
