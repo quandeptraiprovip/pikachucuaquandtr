@@ -8,17 +8,27 @@ using namespace std;
 
 int main() {
     initscr();
-    cbreak();
     keypad(stdscr, TRUE);
-    noecho();
     curs_set(0);
     clear();
 
-    Box1 **board = new Box1 *[BOARDHEIGTH];
-    initBoard(board);
-    renderBoard(board);
-    board[0][0].isSelected = true;
-    board[0][0].drawBox(1);
+    int status = mainMenu();
+    player p;
+
+
+
+
+    while (status != 3) {
+        switch (status)
+        {
+        case 0:
+            getPlayerInfo(p);
+            normalMode(p);
+            break;
+        default:
+            break;
+        }
+    }
     
     getch();
     clear();

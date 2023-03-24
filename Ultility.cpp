@@ -6,13 +6,9 @@
 using namespace std;
 
 int mainMenu() {
-    initscr();
-    cbreak();
+    
     keypad(stdscr, TRUE);
-    noecho();
-    curs_set(0);
-
-    clear();
+    
 
     
 
@@ -115,17 +111,6 @@ int mainMenu() {
         clear();
     }
     
-
-
-    refresh();
-
-
-
-    // Wait for user input
-    getch();
-
-    // Clean up
-    endwin();
 }
 
 void readLeaderBoard() {
@@ -262,9 +247,10 @@ void writeLeaderBoard(player p) {
 void getPlayerInfo(player& p) {
     move(LINES/2 + 4, COLS/2 - 9);
     printw("Enter your name:");
-    cin.getline(p.name, 30);
+    getnstr(p.name, 30);
     p.life = 3;
     p.point = 0;
+
 }
 
 void displayStatus(bool win) {
