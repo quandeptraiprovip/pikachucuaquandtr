@@ -274,7 +274,6 @@ void displayStatus(bool win) {
     curs_set(0);
 
     clear();
-    bool win = false;
     start_color();
     init_pair(1, COLOR_YELLOW, COLOR_BLACK);
     attron(COLOR_PAIR(1));

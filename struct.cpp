@@ -1,6 +1,6 @@
 #include"struct.h"
 
-char box[5][12] = {
+char myBox[5][12] = {
             {" --------- "},
             {"|         |"},
             {"|         |"},
@@ -9,6 +9,7 @@ char box[5][12] = {
 };
 
 void Box1::drawBox() {
+
     if(!isValid) {
         return;
     }
@@ -23,7 +24,7 @@ void Box1::drawBox() {
 
     for (int k = 0; k < 5; k++) {
         move(y * 4 + k, 10 * x - 5);
-        printw(box[k]);
+        printw(myBox[k]);
     }
 
     attroff(COLOR_PAIR(1));
@@ -35,8 +36,8 @@ void Box1::drawBox() {
             printw("         ");
         }
 
-        move(j * 4 + 2, 10 * i - 5 + 5);
-        printw(&c);
+        move(y * 4 + 2, 10 * x - 5 + 5);
+        printw("%c", c);
 
         attroff(COLOR_PAIR(2));
     }else {
@@ -45,6 +46,7 @@ void Box1::drawBox() {
         printw(&c);
         attroff(COLOR_PAIR(1));
     }
+
 }
 
 void Box1::deleteBox() {
@@ -68,7 +70,7 @@ void Box2::drawBox() {
 
     for (int k = 0; k < 5; k++) {
         move(y * 4 + k, 10 * x - 5);
-        printw(box[k]);
+        printw(myBox[k]);
     }
 
     attroff(COLOR_PAIR(1));
@@ -80,7 +82,7 @@ void Box2::drawBox() {
             printw("         ");
         }
 
-        move(j * 4 + 2, 10 * i - 5 + 5);
+        move(y * 4 + 2, 10 * x - 5 + 5);
         printw(&c);
 
         attroff(COLOR_PAIR(2));

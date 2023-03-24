@@ -4,6 +4,10 @@
 #include<ncurses.h>
 using namespace std;
 
+#define BOARDWIDTH 8
+#define BOARDHEIGTH 5
+
+
 struct player {
 	char name[30];
 	int point, life;
