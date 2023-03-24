@@ -209,8 +209,8 @@ void writeLeaderBoard(player p) {
         string str = to_string(list[i].point);
     }
 
-    int index = numberOfPlayers - 1;
-    for(index; index >= 0; index --) {
+    int index;
+    for(index  = numberOfPlayers - 1; index >= 0; index --) {
         if(p.point <= list[index].point) {
             break;
         }

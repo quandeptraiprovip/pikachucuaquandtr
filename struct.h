@@ -4,7 +4,7 @@
 #include<ncurses.h>
 using namespace std;
 
-#define BOARDWIDTH 8
+#define BOARDWIDTH 6
 #define BOARDHEIGTH 5
 
 
@@ -37,3 +37,5 @@ struct Box2 {
 	void drawBox();
 	void deleteBox();
 };
+
+//done

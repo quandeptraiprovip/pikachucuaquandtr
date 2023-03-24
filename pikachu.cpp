@@ -13,18 +13,12 @@ int main() {
     curs_set(0);
     clear();
 
-    // Box1 **board = new Box1*[5];
-    // for(int i = 0; i < 5; i ++) {
-    //     board[i] = new Box1[8];
-    // }
+    
+    Box1 **board = new Box1 *[BOARDHEIGTH];
+    initBoard(board);
+    renderBoard(board);
 
-    Box1 a;
-    a.i = 1;
-    a.j = 2;
-    a.c = 'a';
-    a.isSelected = true;
-
-    a.drawBox();
+    //deleteBoard(board);
     
     getch();
     clear();

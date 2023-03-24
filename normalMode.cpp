@@ -1,6 +1,7 @@
 #include "normalMode.h"
 #include<cstdlib>
 #include<ctime>
+#include <unistd.h>
 
 void initBoard(Box1** board) {
     for (int i = 0; i < BOARDHEIGTH; i++) { // gan vi tri cho tung o mot
@@ -19,8 +20,8 @@ void initBoard(Box1** board) {
         char c = 65 + rand() % 26;
         while (time) { // gan 1 ky tu cho 2 o
             index = rand() % (BOARDWIDTH * BOARDHEIGTH);
-            if (board[index / 8][index % 8].c == ' ') {
-                board[index / 8][index % 8].c = c;
+            if (board[index / 6][index % 6].c == ' ') {
+                board[index / 6][index % 6].c = c;
                 time--;
             }
         }
@@ -34,4 +35,20 @@ void renderBoard(Box1** board) {
             board[i][j].drawBox();
         }
     }
+}
+
+void deleteBoard(Box1** board) {
+    for (int i = 0; i < BOARDHEIGTH; i++) {
+        for (int j = 0; j < BOARDWIDTH; j++) {
+            if (board[i][j].isValid) {
+                board[i][j].deleteBox();
+                //sleep(1);
+            }
+        }
+    }
+
+    for (int i = 0; i < BOARDHEIGTH; i++) {
+        delete[]board[i];
+    }
+    delete[]board;
 }
