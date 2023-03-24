@@ -9,16 +9,16 @@ using namespace std;
 int main() {
     initscr();
     cbreak();
+    keypad(stdscr, TRUE);
     noecho();
     curs_set(0);
     clear();
 
-    
     Box1 **board = new Box1 *[BOARDHEIGTH];
     initBoard(board);
     renderBoard(board);
-
-    //deleteBoard(board);
+    board[0][0].isSelected = true;
+    board[0][0].drawBox(1);
     
     getch();
     clear();

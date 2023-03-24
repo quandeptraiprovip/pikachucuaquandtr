@@ -32,7 +32,7 @@ void initBoard(Box1** board) {
 void renderBoard(Box1** board) {
     for (int i = 0; i < BOARDHEIGTH; i++) {
         for (int j = 0; j < BOARDWIDTH; j++) {
-            board[i][j].drawBox();
+            board[i][j].drawBox(0);
         }
     }
 }
@@ -51,4 +51,18 @@ void deleteBoard(Box1** board) {
         delete[]board[i];
     }
     delete[]board;
+}
+
+//status 0 dang choi game
+//       1 het game
+//       2 nguoi choi esc
+
+void move(Box1** board, position& pos, int& status, player& p, position selectedPos[], int& couple) {
+    int key;
+    // if(key == 27)//key escape
+    // {
+    //     status = 2;
+    // }else if(key = KEY_ENTER) {
+        
+    // }       
 }

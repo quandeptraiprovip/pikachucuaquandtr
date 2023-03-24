@@ -23,7 +23,7 @@ struct Box1 {
     bool isValid, isSelected;
 
     Box1() : c(' '), isValid(true), isSelected(false) {}
-    void drawBox();
+    void drawBox(int);
     void deleteBox();
 };
 
@@ -35,6 +35,8 @@ struct Box2 {
 
 	Box2() : c(' '), isSelected(false) {}
 	void drawBox();
+	void drawBoxMatch();
+	void drawBoxUnmatch();
 	void deleteBox();
 };
 
