@@ -43,7 +43,6 @@ void deleteBoard(Box1** board) {
         for (int j = 0; j < BOARDWIDTH; j++) {
             if (board[i][j].isValid) {
                 board[i][j].deleteBox();
-                //sleep(1);
             }
         }
     }
@@ -59,17 +58,21 @@ void deleteBoard(Box1** board) {
 //       2 nguoi choi esc
 
 void move(Box1** board, position& pos, int& status, player& p, position selectedPos[], int& couple) {
-    keypad(stdscr, TRUE);
+    //keypad(stdscr, TRUE);
     int key;
     key = getch();
-    if(key == 27)//key escape
+    if(key == 'q')//key escape
     {
         status = 2;
-    }else if(key == KEY_ENTER) {
+    }else if(key == '\n') {
         if (pos.x == selectedPos[0].x && pos.y == selectedPos[0].y)//chon trung nhau
         {
             board[selectedPos[0].x][selectedPos[0].y].drawBox(2);
             board[selectedPos[0].x][selectedPos[0].y].isSelected = false;
+            refresh();
+            napms(500);
+
+
             couple = 2;
             selectedPos[0].x = -1;
             selectedPos[0].y = -1;
@@ -79,7 +82,7 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
         }else {
             selectedPos[2 - couple].x = pos.x;
             selectedPos[2 - couple].y = pos.y;
-            board[pos.x][pos.y].isSelected = 1;
+            board[pos.x][pos.y].isSelected = true;
             couple--;
 
             if(couple == 0) {
@@ -92,6 +95,9 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                         board[selectedPos[0].x][selectedPos[0].y].drawBox(1);
                         board[selectedPos[1].x][selectedPos[1].y].drawBox(1);
 
+                        refresh();
+                        napms(500);
+
                         board[selectedPos[0].x][selectedPos[0].y].isValid = 0;
                         board[selectedPos[0].x][selectedPos[0].y].deleteBox();
 
@@ -101,6 +107,9 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                         board[selectedPos[0].x][selectedPos[0].y].drawBox(2);
                         board[selectedPos[1].x][selectedPos[1].y].drawBox(2);
 
+                        refresh();
+                        napms(500);
+
                         p.life--;
                         move (0,50);
                         printw("Life: %d", p.life);
@@ -108,6 +117,9 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }else {
                     board[selectedPos[0].x][selectedPos[0].y].drawBox(2);
                     board[selectedPos[1].x][selectedPos[1].y].drawBox(2);
+
+                    refresh();
+                    napms(500);
 
                     p.life--;
                     move (0,50);
@@ -335,7 +347,7 @@ void normalMode(player& p) {
     move (0,50);
     printw("Life: %d", p.life);
 
-    
+    move (5, 63);
     printw("- Press arrow key");
     move (6, 68);
     printw("to move");

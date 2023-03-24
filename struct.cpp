@@ -7,7 +7,7 @@ char myBox[5][12] = {
             {"|         |"},
             {" --------- "}
 };
-//mode 0 selected
+//mode 0 normal
 //mode 1 match
 //mode 2 unmatch
 void Box1::drawBox(int mode) {
@@ -45,6 +45,8 @@ void Box1::drawBox(int mode) {
             printw("%c", c);
 
             attroff(COLOR_PAIR(3));
+
+            
         }else if(mode == 2) {
             attron(COLOR_PAIR(4));
             for (int k = 0; k < 3; k++) {
@@ -56,12 +58,14 @@ void Box1::drawBox(int mode) {
             printw("%c", c);
 
             attroff(COLOR_PAIR(4));
+
         }else {
             attron(COLOR_PAIR(2));
             for (int k = 0; k < 3; k++) {
                 move(4*x + k + 2 + 1, y*10 + 2 + 1);
                 printw("         ");
             }
+
 
             move(4*x + 2 + 2, y*10 + 2 + 5);
             printw("%c", c);

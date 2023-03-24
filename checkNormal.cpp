@@ -1,6 +1,10 @@
 #include"checkNormal.h"
 
 bool checkLineX (Box1** board, int y1, int y2, int x) {
+    if(x == 0 && x == BOARDHEIGTH - 1) {
+        return true;
+    }
+
     int maxY = max(y1, y2);
     int minY = min(y1, y2);
 
@@ -14,10 +18,14 @@ bool checkLineX (Box1** board, int y1, int y2, int x) {
 }
 
 bool checkLineY(Box1** board, int x1, int x2, int y) {
+    if(y == 0 && y == BOARDWIDTH - 1) {
+        return true;
+    }
+
     int maxX = max(x1, x2);
     int minX = min(x1, x2);
 
-    for(int i = minX + 1; i <= maxX; i++) {
+    for(int i = minX + 1; i < maxX; i++) {
         if(board[i][y].isValid == true) {
             return false;
         }
