@@ -57,6 +57,10 @@ bool checkZX(Box1** board, int x1, int y1, int x2, int y2) {
         xOfMax = x2;
         xOfMin = x1;
     }
+    
+    if(board[xOfMin][minY + 1].isValid == true) {
+        return false;
+    }
 
     for(int i = minY + 1; i <= maxY; i++) {
         if(checkLineX(board, minY, i, xOfMin) && checkLineY(board, xOfMin, xOfMax, i) && checkLineX(board, i, maxY, xOfMax)) {
@@ -83,6 +87,10 @@ bool checkZY(Box1** board, int x1, int y1, int x2, int y2) {
         yOfMin = y1;
     }
 
+    if(board[minX + 1][yOfMin].isValid == true) {
+        return false;
+    }
+
     for(int i = minX + 1; i <= maxX; i++) {
         if(checkLineY(board, minX, i, yOfMin) && checkLineX(board, yOfMin, yOfMax, i) && checkLineY(board, i, maxX, yOfMax)) {
             return true;
@@ -98,7 +106,7 @@ bool checkUX(Box1** board, position p1, position p2, int type) {
         pMinY = p2;
         pMaxY = p1;
     }
-    // find line and y begin
+    
     int y = pMaxY.y;
     int row = pMinY.x;
 
@@ -109,9 +117,11 @@ bool checkUX(Box1** board, position p1, position p2, int type) {
 
     y+= type;
 
-    if(y == 0 || y == BOARDWIDTH - 1) {
-        if (checkLineX(board,pMinY.y, pMaxY.y, row)){
+    if(y == -1 || y == BOARDWIDTH) {
+        if (checkLineX(board,pMinY.y, pMaxY.y, row) && board[row][y].isValid == false){
             return true;
+        }else {
+            return false;
         }
     }
 
@@ -147,9 +157,11 @@ bool checkUY(Box1** board, position p1, position p2, int type) {
 
     x += type;
 
-    if(x == 0 || x == BOARDHEIGTH - 1) {
-        if (checkLineY(board ,pMinX.x, pMaxX.x, col)){
+    if(x == -1 || x == BOARDHEIGTH) {
+        if (checkLineY(board ,pMinX.x, pMaxX.x, col) && board[x][col].isValid == false){
             return true;
+        }else {
+            return false;
         }
     }
 

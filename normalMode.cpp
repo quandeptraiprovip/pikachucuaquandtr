@@ -53,6 +53,44 @@ void deleteBoard(Box1** board) {
     delete[]board;
 }
 
+void hint(Box1** board) {
+    char check = 'A';
+    while (check >= 'A' && check <= 'Z') {
+        int cnt = 0;
+        int* pos = new int[BOARDHEIGTH * BOARDWIDTH];
+        for (int i = 0; i < BOARDHEIGTH; i++) {
+            for (int j = 0; j < BOARDWIDTH; j++) {
+                if (board[i][j].c == check && board[i][j].isValid) {
+                    pos[cnt++] = i;
+                    pos[cnt++] = j;
+                }
+            }
+        }
+        for (int i = 0; i < cnt - 2; i += 2) {
+            for (int j = i + 2; j < cnt; j += 2) {
+                position p1;
+                p1.x = pos[i];
+                p1.y = pos[i + 1];
+                position p2;
+                p2.x = pos[j];
+                p2.y = pos[j + 1];
+                if (allcheck(board, p1, p2)) {
+                    board[p1.x][p1.y].drawBox(3);
+                    board[p2.x][p2.y].drawBox(3);
+                    refresh();
+                    napms(1000);
+                    delete[] pos;
+                    return;
+                }
+            }
+        }
+        check++;
+        delete[] pos;
+
+
+    }
+}
+
 //status 0 dang choi game
 //       1 het game
 //       2 nguoi choi esc
@@ -156,7 +194,10 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
         }
-    }else //neu la dau mui ten
+    }else if(key == 'h') {
+        hint(board);
+    }
+    else //neu la dau mui ten
     {
         //ktra xem o nay co dc chon k
         if ((pos.y != selectedPos[0].y || pos.x != selectedPos[0].x) && (pos.y != selectedPos[1].y || pos.x != selectedPos[1].x)){
@@ -383,7 +424,7 @@ void normalMode(player& p) {
     deleteBoard(board);
     clear();
 
-    if (p.life && status == 1) {
+    if (p.life || status == 1) {
         displayStatus(1);
         move(LINES/2 - 20, COLS/2);
         char c;

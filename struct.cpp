@@ -10,6 +10,7 @@ char myBox[5][12] = {
 //mode 0 normal
 //mode 1 match
 //mode 2 unmatch
+//mode 3 hint
 void Box1::drawBox(int mode) {
 
     if(!isValid) {
@@ -21,6 +22,7 @@ void Box1::drawBox(int mode) {
     init_pair(2, COLOR_BLACK, COLOR_WHITE);
     init_pair(3, COLOR_BLACK, COLOR_GREEN);
     init_pair(4, COLOR_BLACK, COLOR_RED);
+    init_pair(5, COLOR_BLACK, COLOR_BLUE);
     attron(COLOR_PAIR(1));
 
     int x = i;
@@ -75,10 +77,25 @@ void Box1::drawBox(int mode) {
 
         
     }else {
-        attron(COLOR_PAIR(1));
-        move(4*x + 2 + 2, y*10 + 2 + 5);
-        printw("%c", c);
-        attroff(COLOR_PAIR(1));
+        if(mode == 3) {
+            attron(COLOR_PAIR(5));
+            for (int k = 0; k < 3; k++) {
+                move(4*x + k + 2 + 1, y*10 + 2 + 1);
+                printw("         ");
+            }
+
+
+            move(4*x + 2 + 2, y*10 + 2 + 5);
+            printw("%c", c);
+
+            attroff(COLOR_PAIR(5));
+        }else {
+            attron(COLOR_PAIR(1));
+            move(4*x + 2 + 2, y*10 + 2 + 5);
+            printw("%c", c);
+            attroff(COLOR_PAIR(1));
+        }
+        
     }
 
 }
