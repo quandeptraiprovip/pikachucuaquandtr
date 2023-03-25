@@ -47,6 +47,8 @@ void deleteBoard(Box1** board) {
         for (int j = 1; j < BOARDWIDTH + 1; j++) {
             if (board[i][j].isValid) {
                 board[i][j].deleteBox();
+                refresh();
+                napms(50);
             }
         }
     }
