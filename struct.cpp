@@ -25,8 +25,8 @@ void Box1::drawBox(int mode) {
     init_pair(5, COLOR_BLACK, COLOR_BLUE);
     attron(COLOR_PAIR(1));
 
-    int x = i;
-    int y = j;
+    int x = i - 1;
+    int y = j - 1;
 
     for (int k = 0; k < 5; k++) {
         move(4*x + k + 2, y*10 + 2);
@@ -149,7 +149,7 @@ void Box2::drawBox() {
 }
 
 void Box2::deleteBox() {
-    int x = j, y = i;
+    int x = j - 1, y = i - 1;
 
     for (int k = 0; k < 5; k++) {
         move(4*x + k + 2, y*10 + 2);

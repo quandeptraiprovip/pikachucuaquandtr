@@ -5,11 +5,15 @@
 #include <unistd.h>
 
 void initBoard(Box1** board) {
-    for (int i = 0; i < BOARDHEIGTH; i++) { // gan vi tri cho tung o mot
-        board[i] = new Box1[BOARDWIDTH];
-        for (int j = 0; j < BOARDWIDTH; j++) {
+    for (int i = 0; i < BOARDHEIGTH + 2; i++) { // gan vi tri cho tung o mot
+        board[i] = new Box1[BOARDWIDTH + 2];
+        for (int j = 0; j < BOARDWIDTH + 2; j++) {
             board[i][j].j = j;
             board[i][j].i = i;
+
+            if(i == 0 || i == BOARDHEIGTH + 1 || j ==0 || j == BOARDWIDTH + 1) {
+                board[i][j].isValid = false;
+            }
         }
     }
 
@@ -21,8 +25,8 @@ void initBoard(Box1** board) {
         char c = 65 + rand() % 26;
         while (time) { // gan 1 ky tu cho 2 o
             index = rand() % (BOARDWIDTH * BOARDHEIGTH);
-            if (board[index / 6][index % 6].c == ' ') {
-                board[index / 6][index % 6].c = c;
+            if (board[(index / 6) + 1][(index % 6) + 1].c == ' ') {
+                board[(index / 6) + 1][(index % 6) + 1].c = c;
                 time--;
             }
         }
@@ -31,23 +35,23 @@ void initBoard(Box1** board) {
 }
 
 void renderBoard(Box1** board) {
-    for (int i = 0; i < BOARDHEIGTH; i++) {
-        for (int j = 0; j < BOARDWIDTH; j++) {
+    for (int i = 1; i < BOARDHEIGTH + 1; i++) {
+        for (int j = 1; j < BOARDWIDTH + 1; j++) {
             board[i][j].drawBox(0);
         }
     }
 }
 
 void deleteBoard(Box1** board) {
-    for (int i = 0; i < BOARDHEIGTH; i++) {
-        for (int j = 0; j < BOARDWIDTH; j++) {
+    for (int i = 1; i < BOARDHEIGTH + 1; i++) {
+        for (int j = 1; j < BOARDWIDTH + 1; j++) {
             if (board[i][j].isValid) {
                 board[i][j].deleteBox();
             }
         }
     }
 
-    for (int i = 0; i < BOARDHEIGTH; i++) {
+    for (int i = 0; i < BOARDHEIGTH + 2; i++) {
         delete[]board[i];
     }
     delete[]board;
@@ -58,8 +62,8 @@ void hint(Box1** board) {
     while (check >= 'A' && check <= 'Z') {
         int cnt = 0;
         int* pos = new int[BOARDHEIGTH * BOARDWIDTH];
-        for (int i = 0; i < BOARDHEIGTH; i++) {
-            for (int j = 0; j < BOARDWIDTH; j++) {
+        for (int i = 1; i < BOARDHEIGTH + 1; i++) {
+            for (int j = 1; j < BOARDWIDTH + 1; j++) {
                 if (board[i][j].c == check && board[i][j].isValid) {
                     pos[cnt++] = i;
                     pos[cnt++] = j;
@@ -173,8 +177,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 selectedPos[1].y = -1;
 
                 // tim curPos moi
-                for (int i = pos.x; i < BOARDHEIGTH; i++) {
-                    for (int j = pos.y; j < BOARDWIDTH; j++) {
+                for (int i = pos.x; i < BOARDHEIGTH + 1; i++) {
+                    for (int j = pos.y; j < BOARDWIDTH + 1; j++) {
                         if (board[i][j].isValid) {
                             pos.x = i;
                             pos.y = j;
@@ -183,8 +187,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                     }
                 }
 
-                for (int i = 0; i <= pos.x; i++) {
-                    for (int j = 0; j <= pos.y; j++) {
+                for (int i = 1; i <= pos.x; i++) {
+                    for (int j = 1; j <= pos.y; j++) {
                         if (board[i][j].isValid) {
                             pos.x = i;
                             pos.y = j;
@@ -207,8 +211,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
         switch (key)
         {
         case KEY_UP:
-            for (int i = pos.y; i < BOARDWIDTH; i++) {
-                for (int j = pos.x - 1; j >= 0; j--) {
+            for (int i = pos.y; i < BOARDWIDTH + 1; i++) {
+                for (int j = pos.x - 1; j >= 1; j--) {
                     if (board[j][i].isValid) {
                         pos.y = i;
                         pos.x = j;
@@ -217,8 +221,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y - 1; i >= 0; i--) {
-                for (int j = pos.x - 1; j >= 0; j--) {
+            for (int i = pos.y - 1; i >= 1; i--) {
+                for (int j = pos.x - 1; j >= 1; j--) {
                     if (board[j][i].isValid) {
                         pos.x = j;
                         pos.y = i;
@@ -227,8 +231,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y; i < BOARDWIDTH; i++) {
-                for (int j = BOARDHEIGTH - 1; j > pos.x; j--) {
+            for (int i = pos.y; i < BOARDWIDTH + 1; i++) {
+                for (int j = BOARDHEIGTH; j > pos.x; j--) {
                     if (board[j][i].isValid) {
                         pos.x = j;
                         pos.y = i;
@@ -237,8 +241,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y; i >= 0; i--) {
-                for (int j = BOARDHEIGTH - 1; j > pos.x; j--) {
+            for (int i = pos.y; i >= 1; i--) {
+                for (int j = BOARDHEIGTH; j > pos.x; j--) {
                     if (board[j][i].isValid) {
                         pos.x = j;
                         pos.y = i;
@@ -249,8 +253,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
 
             break;
         case KEY_DOWN:
-            for (int i = pos.y; i < BOARDWIDTH; i++) {
-                for (int j = pos.x + 1; j < BOARDHEIGTH; j++) {
+            for (int i = pos.y; i < BOARDWIDTH + 1; i++) {
+                for (int j = pos.x + 1; j < BOARDHEIGTH + 1; j++) {
                     if (board[j][i].isValid) {
                         pos.x = j;
                         pos.y = i;
@@ -259,8 +263,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y - 1; i >= 0; i--) {
-                for (int j = pos.x + 1; j < BOARDHEIGTH; j++) {
+            for (int i = pos.y - 1; i >= 1; i--) {
+                for (int j = pos.x + 1; j < BOARDHEIGTH + 1; j++) {
                     if (board[j][i].isValid) {
                         pos.x = j;
                         pos.y = i;
@@ -269,8 +273,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y; i < BOARDWIDTH; i++) {
-                for (int j = 0; j < pos.x; j++) {
+            for (int i = pos.y; i < BOARDWIDTH + 1; i++) {
+                for (int j = 1; j < pos.x; j++) {
                     if (board[j][i].isValid) {
                         pos.x = j;
                         pos.y = i;
@@ -279,8 +283,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y - 1; i >= 0; i--) {
-                for (int j = 0; j < pos.x; j++) {
+            for (int i = pos.y - 1; i >= 1; i--) {
+                for (int j = 1; j < pos.x; j++) {
                     if (board[j][i].isValid) {
                         pos.x = j;
                         pos.y = i;
@@ -290,8 +294,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
             }
             break;
         case KEY_LEFT:
-            for (int i = pos.x; i >= 0; i--) {
-                for (int j = pos.y - 1; j >= 0; j--) {
+            for (int i = pos.x; i >= 1; i--) {
+                for (int j = pos.y - 1; j >= 1; j--) {
                     if (board[i][j].isValid) {
                         pos.x = i;
                         pos.y = j;
@@ -300,8 +304,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
-                for (int j = pos.y - 1; j >= 0; j--) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH + 1; i++) {
+                for (int j = pos.y - 1; j >= 1; j--) {
                     if (board[i][j].isValid) {
                         pos.x = i;
                         pos.y = j;
@@ -310,8 +314,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x; i >= 0; i--) {
-                for (int j = BOARDWIDTH - 1; j > pos.y; j--) {
+            for (int i = pos.x; i >= 1; i--) {
+                for (int j = BOARDWIDTH; j > pos.y; j--) {
                     if (board[i][j].isValid) {
                         pos.x = i;
                         pos.y = j;
@@ -320,8 +324,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
-                for (int j = BOARDWIDTH - 1; j > pos.y; j--) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH + 1; i++) {
+                for (int j = BOARDWIDTH; j > pos.y; j--) {
                     if (board[i][j].isValid) {
                         pos.x = i;
                         pos.y = j;
@@ -331,8 +335,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
             }
             break;
         case KEY_RIGHT:
-            for (int i = pos.x; i >= 0; i--) {
-                for (int j = pos.y + 1; j < BOARDWIDTH; j++) {
+            for (int i = pos.x; i >= 1; i--) {
+                for (int j = pos.y + 1; j < BOARDWIDTH + 1; j++) {
                     if (board[i][j].isValid) {
                         pos.x = i;
                         pos.y = j;
@@ -341,8 +345,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
-                for (int j = pos.y + 1; j < BOARDWIDTH; j++) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH + 1; i++) {
+                for (int j = pos.y + 1; j < BOARDWIDTH + 1; j++) {
                     if (board[i][j].isValid) {
                         pos.x = i;
                         pos.y = j;
@@ -351,8 +355,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x; i >= 0; i--) {
-                for (int j = 0; j < pos.y; j++) {
+            for (int i = pos.x; i >= 1; i--) {
+                for (int j = 1; j < pos.y; j++) {
                     if (board[i][j].isValid) {
                         pos.x = i;
                         pos.y = j;
@@ -361,8 +365,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
-                for (int j = 0; j < pos.y; j++) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH + 1; i++) {
+                for (int j = 1; j < pos.y; j++) {
                     if (board[i][j].isValid) {
                         pos.x = i;
                         pos.y = j;
@@ -378,7 +382,7 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
 
 void normalMode(player& p) {
 
-    Box1** board = new Box1 * [BOARDHEIGTH];
+    Box1** board = new Box1 * [BOARDHEIGTH + 2];
     initBoard(board);
 
     move(0, 2);
@@ -404,8 +408,8 @@ void normalMode(player& p) {
     position selectedPos[] = { {-1, -1}, {-1, -1} };
     int couple = 2;
     position curPosition;
-    curPosition.x = 0;
-    curPosition.y = 0;
+    curPosition.x = 1;
+    curPosition.y = 1;
     int status = 0; //0. dang choi game
                     //1. het game
                     //2. nguoi choi chon thoat
@@ -414,6 +418,7 @@ void normalMode(player& p) {
         board[curPosition.x][curPosition.y].isSelected = 1;
 
         renderBoard(board);
+
 
         move(board, curPosition, status, p, selectedPos, couple);
 

@@ -15,5 +15,6 @@ bool checkUX(Box1**, position p1, position p2, int type);
 bool checkUY(Box1**, position p1, position p2, int type);
 //type == 1 right
 //typw == - 1 left
+bool checkL(Box1**, position p1, position p2);
 bool allcheck(Box1**, position p1, position p2);
 bool checkValidPairs(Box1**);

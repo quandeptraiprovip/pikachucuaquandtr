@@ -1,14 +1,11 @@
 #include"checkNormal.h"
 
 bool checkLineX (Box1** board, int y1, int y2, int x) {
-    if(x == 0 && x == BOARDHEIGTH - 1) {
-        return true;
-    }
 
     int maxY = max(y1, y2);
     int minY = min(y1, y2);
 
-    if(maxY == minY) {
+    if(maxY == minY + 1) {
         return true;
     }
 
@@ -22,14 +19,11 @@ bool checkLineX (Box1** board, int y1, int y2, int x) {
 }
 
 bool checkLineY(Box1** board, int x1, int x2, int y) {
-    if(y == 0 && y == BOARDWIDTH - 1) {
-        return true;
-    }
 
     int maxX = max(x1, x2);
     int minX = min(x1, x2);
 
-    if(maxX == minX) {
+    if(maxX == minX + 1) {
         return true;
     }
 
@@ -40,6 +34,29 @@ bool checkLineY(Box1** board, int x1, int x2, int y) {
     }
 
     return true;
+}
+
+bool checkL(Box1** board, position p1, position p2) {
+    position minY;
+    position maxY;
+
+    if(p1.y > p2.y) {
+        minY = p2;
+        maxY = p1;
+    }else {
+        minY = p1;
+        maxY = p2;
+    }
+
+    if(checkLineX(board, p2.y, p1.y, p2.x) && checkLineY(board, p2.x, p1.x, p1.y) && board[p2.x][p1.y].isValid == false) {
+        return true;
+    }
+
+    if(checkLineY(board, p2.x, p1.x, p2.y) && checkLineX(board, p2.y, p1.y, p1.x) && board[p1.x][p2.y].isValid == false) {
+        return true;
+    }
+
+    return false;
 }
 
 bool checkZX(Box1** board, int x1, int y1, int x2, int y2) {
@@ -57,13 +74,11 @@ bool checkZX(Box1** board, int x1, int y1, int x2, int y2) {
         xOfMax = x2;
         xOfMin = x1;
     }
-    
-    if(board[xOfMin][minY + 1].isValid == true) {
-        return false;
-    }
 
     for(int i = minY + 1; i <= maxY; i++) {
-        if(checkLineX(board, minY, i, xOfMin) && checkLineY(board, xOfMin, xOfMax, i) && checkLineX(board, i, maxY, xOfMax)) {
+        if((checkLineX(board, minY, i, xOfMin) && board[xOfMin][i].isValid == false) && 
+            (checkLineY(board, xOfMin, xOfMax, i) && board[xOfMax][i].isValid == false) && 
+            checkLineX(board, i, maxY, xOfMax)) {
             return true;
         }
     }
@@ -87,12 +102,10 @@ bool checkZY(Box1** board, int x1, int y1, int x2, int y2) {
         yOfMin = y1;
     }
 
-    if(board[minX + 1][yOfMin].isValid == true) {
-        return false;
-    }
-
     for(int i = minX + 1; i <= maxX; i++) {
-        if(checkLineY(board, minX, i, yOfMin) && checkLineX(board, yOfMin, yOfMax, i) && checkLineY(board, i, maxX, yOfMax)) {
+        if((checkLineY(board, minX, i, yOfMin) && board[i][yOfMin].isValid == false) && 
+            (checkLineX(board, yOfMin, yOfMax, i) && board[i][yOfMax].isValid == false) && 
+            checkLineY(board, i, maxX, yOfMax)) {
             return true;
         } 
     }
@@ -106,7 +119,7 @@ bool checkUX(Box1** board, position p1, position p2, int type) {
         pMinY = p2;
         pMaxY = p1;
     }
-    
+
     int y = pMaxY.y;
     int row = pMinY.x;
 
@@ -115,18 +128,8 @@ bool checkUX(Box1** board, position p1, position p2, int type) {
         row = pMaxY.x;
     }
 
-    y+= type;
-
-    if(y == -1 || y == BOARDWIDTH) {
-        if (checkLineX(board,pMinY.y, pMaxY.y, row) && board[row][y].isValid == false){
-            return true;
-        }else {
-            return false;
-        }
-    }
-
-    if (checkLineX(board,pMinY.y, pMaxY.y, row)) {
-        while (board[pMinY.x][y].isValid == false && board[pMaxY.x][y].isValid == false && (y >= 0 || y < BOARDWIDTH)) {
+    if (checkLineX(board,pMinY.y, pMaxY.y, row) && board[row][y].isValid == false) {
+        while (board[pMinY.x][y].isValid == false && board[pMaxY.x][y].isValid == false && (y >= 0 && y < BOARDWIDTH)) {
             if (checkLineY(board, pMinY.x, pMaxY.x, y)) {
                return true;
             }
@@ -135,9 +138,6 @@ bool checkUX(Box1** board, position p1, position p2, int type) {
         }
     }
 
-    if(y == -1 || y == BOARDWIDTH) {
-        return true;
-    }
 
     return false;
 }
@@ -155,28 +155,14 @@ bool checkUY(Box1** board, position p1, position p2, int type) {
         col = pMaxX.y;
     }
 
-    x += type;
-
-    if(x == -1 || x == BOARDHEIGTH) {
-        if (checkLineY(board ,pMinX.x, pMaxX.x, col) && board[x][col].isValid == false){
-            return true;
-        }else {
-            return false;
-        }
-    }
-
-    if (checkLineY(board ,pMinX.x, pMaxX.x, col)) {
-        while (board[x][pMinX.y].isValid == false && board[x][pMaxX.x].isValid == false && (x >= 0 || x < BOARDHEIGTH)) {
+    if (checkLineY(board ,pMinX.x, pMaxX.x, col) && board[x][col].isValid == false) {
+        while (board[x][pMinX.y].isValid == false && board[x][pMaxX.y].isValid == false && (x >= 0 && x < BOARDHEIGTH)) {
             if (checkLineX(board ,pMinX.y, pMaxX.y, x)) {
                 return true;
             }
 
             x += type;
         }
-    }
-
-    if(x == -1 || x == BOARDHEIGTH) {
-        return true;
     }
 
     return false;
@@ -216,6 +202,10 @@ bool allcheck(Box1** board, position p1, position p2) {
     }
     
     if ((checkUY(board ,p1, p2, -1))) {
+        return true;
+    }
+
+    if(checkL(board, p1, p2)) {
         return true;
     }
 
