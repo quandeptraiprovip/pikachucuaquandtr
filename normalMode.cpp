@@ -166,9 +166,9 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
         switch (key)
         {
         case KEY_UP:
-            for (int i = pos.x; i < BOARDWIDTH; i++) {
+            for (int i = pos.y; i < BOARDWIDTH; i++) {
                 for (int j = pos.x - 1; j >= 0; j--) {
-                    if (board[i][j].isValid) {
+                    if (board[j][i].isValid) {
                         pos.y = i;
                         pos.x = j;
                         return;
@@ -176,9 +176,82 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x - 1; i >= 0; i--) {
-                for (int j = pos.y - 1; j >= 0; j--) {
+            for (int i = pos.y - 1; i >= 0; i--) {
+                for (int j = pos.x - 1; j >= 0; j--) {
                     if (board[j][i].isValid) {
+                        pos.x = j;
+                        pos.y = i;
+                        return;
+                    }
+                }
+            }
+
+            for (int i = pos.y; i < BOARDWIDTH; i++) {
+                for (int j = BOARDHEIGTH - 1; j > pos.x; j--) {
+                    if (board[j][i].isValid) {
+                        pos.x = j;
+                        pos.y = i;
+                        return;
+                    }
+                }
+            }
+
+            for (int i = pos.y; i >= 0; i--) {
+                for (int j = BOARDHEIGTH - 1; j > pos.x; j--) {
+                    if (board[j][i].isValid) {
+                        pos.x = j;
+                        pos.y = i;
+                        return;
+                    }
+                }
+            }
+
+            break;
+        case KEY_DOWN:
+            for (int i = pos.y; i < BOARDWIDTH; i++) {
+                for (int j = pos.x + 1; j < BOARDHEIGTH; j++) {
+                    if (board[j][i].isValid) {
+                        pos.x = j;
+                        pos.y = i;
+                        return;
+                    }
+                }
+            }
+
+            for (int i = pos.y - 1; i >= 0; i--) {
+                for (int j = pos.x + 1; j < BOARDHEIGTH; j++) {
+                    if (board[j][i].isValid) {
+                        pos.x = j;
+                        pos.y = i;
+                        return;
+                    }
+                }
+            }
+
+            for (int i = pos.y; i < BOARDWIDTH; i++) {
+                for (int j = 0; j < pos.x; j++) {
+                    if (board[j][i].isValid) {
+                        pos.x = j;
+                        pos.y = i;
+                        return;
+                    }
+                }
+            }
+
+            for (int i = pos.y - 1; i >= 0; i--) {
+                for (int j = 0; j < pos.x; j++) {
+                    if (board[j][i].isValid) {
+                        pos.x = j;
+                        pos.y = i;
+                        return;
+                    }
+                }
+            }
+            break;
+        case KEY_LEFT:
+            for (int i = pos.x; i >= 0; i--) {
+                for (int j = pos.y - 1; j >= 0; j--) {
+                    if (board[i][j].isValid) {
                         pos.x = i;
                         pos.y = j;
                         return;
@@ -186,9 +259,9 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x; i < BOARDWIDTH; i++) {
-                for (int j = BOARDHEIGTH - 1; j > pos.y; j--) {
-                    if (board[j][i].isValid) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
+                for (int j = pos.y - 1; j >= 0; j--) {
+                    if (board[i][j].isValid) {
                         pos.x = i;
                         pos.y = j;
                         return;
@@ -197,134 +270,61 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
             }
 
             for (int i = pos.x; i >= 0; i--) {
-                for (int j = BOARDHEIGTH - 1; j > pos.y; j--) {
-                    if (board[j][i].isValid) {
-                        pos.x = i;
-                        pos.y = j;
-                        return;
-                    }
-                }
-            }
-
-            break;
-        case KEY_DOWN:
-            for (int i = pos.x; i < BOARDWIDTH; i++) {
-                for (int j = pos.y + 1; j < BOARDHEIGTH; j++) {
-                    if (board[j][i].isValid) {
-                        pos.x = i;
-                        pos.y = j;
-                        return;
-                    }
-                }
-            }
-
-            for (int i = pos.x - 1; i >= 0; i--) {
-                for (int j = pos.y + 1; j < BOARDHEIGTH; j++) {
-                    if (board[j][i].isValid) {
-                        pos.x = i;
-                        pos.y = j;
-                        return;
-                    }
-                }
-            }
-
-            for (int i = pos.x; i < BOARDWIDTH; i++) {
-                for (int j = 0; j < pos.y; j++) {
-                    if (board[j][i].isValid) {
-                        pos.x = i;
-                        pos.y = j;
-                        return;
-                    }
-                }
-            }
-
-            for (int i = pos.x - 1; i >= 0; i--) {
-                for (int j = 0; j < pos.y; j++) {
-                    if (board[j][i].isValid) {
-                        pos.x = i;
-                        pos.y = j;
-                        return;
-                    }
-                }
-            }
-            break;
-        case KEY_LEFT:
-            for (int i = pos.y; i >= 0; i--) {
-                for (int j = pos.x - 1; j >= 0; j--) {
+                for (int j = BOARDWIDTH - 1; j > pos.y; j--) {
                     if (board[i][j].isValid) {
-                        pos.x = j;
-                        pos.y = i;
+                        pos.x = i;
+                        pos.y = j;
                         return;
                     }
                 }
             }
 
-            for (int i = pos.y + 1; i < BOARDHEIGTH; i++) {
-                for (int j = pos.x - 1; j >= 0; j--) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
+                for (int j = BOARDWIDTH - 1; j > pos.y; j--) {
                     if (board[i][j].isValid) {
-                        pos.x = j;
-                        pos.y = i;
-                        return;
-                    }
-                }
-            }
-
-            for (int i = pos.y; i >= 0; i--) {
-                for (int j = BOARDWIDTH - 1; j > pos.x; j--) {
-                    if (board[i][j].isValid) {
-                        pos.x = j;
-                        pos.y = i;
-                        return;
-                    }
-                }
-            }
-
-            for (int i = pos.y + 1; i < BOARDHEIGTH; i++) {
-                for (int j = BOARDWIDTH - 1; j > pos.x; j--) {
-                    if (board[i][j].isValid) {
-                        pos.x = j;
-                        pos.y = i;
+                        pos.x = i;
+                        pos.y = j;
                         return;
                     }
                 }
             }
             break;
         case KEY_RIGHT:
-            for (int i = pos.y; i >= 0; i--) {
-                for (int j = pos.x + 1; j < BOARDWIDTH; j++) {
+            for (int i = pos.x; i >= 0; i--) {
+                for (int j = pos.y + 1; j < BOARDWIDTH; j++) {
                     if (board[i][j].isValid) {
-                        pos.x = j;
-                        pos.y = i;
+                        pos.x = i;
+                        pos.y = j;
                         return;
                     }
                 }
             }
 
-            for (int i = pos.y + 1; i < BOARDHEIGTH; i++) {
-                for (int j = pos.x + 1; j < BOARDWIDTH; j++) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
+                for (int j = pos.y + 1; j < BOARDWIDTH; j++) {
                     if (board[i][j].isValid) {
-                        pos.x = j;
-                        pos.y = i;
+                        pos.x = i;
+                        pos.y = j;
                         return;
                     }
                 }
             }
 
-            for (int i = pos.y; i >= 0; i--) {
-                for (int j = 0; j < pos.x; j++) {
+            for (int i = pos.x; i >= 0; i--) {
+                for (int j = 0; j < pos.y; j++) {
                     if (board[i][j].isValid) {
-                        pos.x = j;
-                        pos.y = i;
+                        pos.x = i;
+                        pos.y = j;
                         return;
                     }
                 }
             }
 
-            for (int i = pos.y + 1; i < BOARDHEIGTH; i++) {
-                for (int j = 0; j < pos.x; j++) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
+                for (int j = 0; j < pos.y; j++) {
                     if (board[i][j].isValid) {
-                        pos.x = j;
-                        pos.y = i;
+                        pos.x = i;
+                        pos.y = j;
                         return;
                     }
                 }
