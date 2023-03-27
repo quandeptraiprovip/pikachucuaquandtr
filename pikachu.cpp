@@ -4,6 +4,7 @@
 #include"struct.h"
 #include "Utility.h"
 #include "normalMode.h"
+#include "difficultMode.h"
 using namespace std;
 
 int main() {
@@ -12,24 +13,10 @@ int main() {
     curs_set(0);
     clear();
 
-    int status = mainMenu();
-    player p;
-
-
-
-
-    while (status != 3) {
-        switch (status)
-        {
-        case 0:
-            getPlayerInfo(p);
-            normalMode(p);
-            break;
-        default:
-            break;
-        }
-    }
+    Box2 **board = new Box2*[BOARDHEIGTH + 2];
     
+    initList(board);
+    renderList(board);
 
 
     getch();

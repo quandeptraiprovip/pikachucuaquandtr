@@ -34,7 +34,7 @@ struct Box2 {
 	Box2* next;
 
 	Box2() : c(' '), isSelected(false) {}
-	void drawBox();
+	void drawBox(int);
 	void drawBoxMatch();
 	void drawBoxUnmatch();
 	void deleteBox();

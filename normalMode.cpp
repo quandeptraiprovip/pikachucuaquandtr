@@ -25,8 +25,8 @@ void initBoard(Box1** board) {
         char c = 65 + rand() % 26;
         while (time) { // gan 1 ky tu cho 2 o
             index = rand() % (BOARDWIDTH * BOARDHEIGTH);
-            if (board[(index / 6) + 1][(index % 6) + 1].c == ' ') {
-                board[(index / 6) + 1][(index % 6) + 1].c = c;
+            if (board[(index / BOARDWIDTH) + 1][(index % BOARDWIDTH) + 1].c == ' ') {
+                board[(index / BOARDWIDTH) + 1][(index % BOARDWIDTH) + 1].c = c;
                 time--;
             }
         }
@@ -391,24 +391,24 @@ void normalMode(player& p) {
     printw("Name: %s", p.name);
     move (0, 30);
     printw("Point: %d", p.point);
-    move (0,50);
+    move (0,COLS - 25);
     printw("Life: %d", p.life);
 
-    move (5, 63);
+    move (5, COLS - 17);
     printw("- Press arrow key");
     move (6, 68);
     printw("to move");
-    move (8, 63);
+    move (8, COLS - 17);
     printw("- Press ENTER key");
     move(9, 68);
     printw("to choose");
-    move (11, 63);
+    move (11, COLS - 17);
     printw("- Press ESC key");
     move (12, 68);
     printw("to quit");
-    move(14, 68);
-    printw("- Press H ");
-    move(15, 64);
+    move(14, COLS - 17);
+    printw("-   Press H ");
+    move(15, 66);
     printw("to get hint");
 
     position selectedPos[] = { {-1, -1}, {-1, -1} };
@@ -475,4 +475,4 @@ void normalMode(player& p) {
 // printw("- Press ESC key");
 // move (12, 68);
 // printw("to quit");
-//dcm'//main
+//dcm //main
