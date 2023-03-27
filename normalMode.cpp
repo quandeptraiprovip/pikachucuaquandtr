@@ -475,4 +475,4 @@ void normalMode(player& p) {
 // printw("- Press ESC key");
 // move (12, 68);
 // printw("to quit");
-//dcm
+//dcm'//main
