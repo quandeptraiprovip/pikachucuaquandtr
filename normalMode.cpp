@@ -476,3 +476,4 @@ void normalMode(player& p) {
 // move (12, 68);
 // printw("to quit");
 //dcm
+//test
