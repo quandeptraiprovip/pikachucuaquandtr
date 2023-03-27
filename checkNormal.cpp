@@ -129,7 +129,7 @@ bool checkUX(Box1** board, position p1, position p2, int type) {
     }
 
     if (checkLineX(board,pMinY.y, pMaxY.y, row) && board[row][y].isValid == false) {
-        while (board[pMinY.x][y].isValid == false && board[pMaxY.x][y].isValid == false && (y >= 0 && y < BOARDWIDTH)) {
+        while (board[pMinY.x][y].isValid == false && board[pMaxY.x][y].isValid == false && (y >= 0 && y <= BOARDWIDTH + 1)) {
             if (checkLineY(board, pMinY.x, pMaxY.x, y)) {
                return true;
             }
@@ -156,7 +156,7 @@ bool checkUY(Box1** board, position p1, position p2, int type) {
     }
 
     if (checkLineY(board ,pMinX.x, pMaxX.x, col) && board[x][col].isValid == false) {
-        while (board[x][pMinX.y].isValid == false && board[x][pMaxX.y].isValid == false && (x >= 0 && x < BOARDHEIGTH)) {
+        while (board[x][pMinX.y].isValid == false && board[x][pMaxX.y].isValid == false && (x >= 0 && x <= BOARDHEIGTH + 1)) {
             if (checkLineX(board ,pMinX.y, pMaxX.y, x)) {
                 return true;
             }

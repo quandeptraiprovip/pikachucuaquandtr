@@ -406,6 +406,10 @@ void normalMode(player& p) {
     printw("- Press ESC key");
     move (12, 68);
     printw("to quit");
+    move(14, 68);
+    printw("- Press H ");
+    move(15, 64);
+    printw("to get hint");
 
     position selectedPos[] = { {-1, -1}, {-1, -1} };
     int couple = 2;
@@ -433,6 +437,8 @@ void normalMode(player& p) {
 
     if (p.life || status == 1) {
         displayStatus(1);
+        refresh();
+        napms(5000);
         move(LINES/2 - 20, COLS/2);
         char c;
         printw("Do you want to continue next game? (Y/N): ");
