@@ -6,4 +6,5 @@ void initList(Box2**);
 void deleteList(Box2**);
 void renderList(Box2**);
 void move(Box2**, position&, int&, player&, position[], int&);
+void hint(Box2**);
 void difficultMode(player&);
