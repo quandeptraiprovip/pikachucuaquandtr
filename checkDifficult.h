@@ -7,11 +7,16 @@
 Box2* findTheNode(Box2**, int, int);
 bool Icheck(Box2** , position, position);
 bool Lcheck(Box2**, position, position);
-bool UandZcheck(Box2**, position, position);
+//mode 1 check up
+//mode -1 check down
+bool UYcheck(Box2**, position, position, int mode);
+//check u right
+bool UXcheck(Box2**, position, position);
+bool Zcheck(Box2**, position, position);
 bool allCheck(Box2**, position, position);
-void delHead(Box2**, int x);
-void delTail(Box2**, int x);
-void delAt(Box2**, int x, int k);
-void deleteNode(Box2**, int, int);
+Box2* delHead(Box2* l);
+Box2* delTail(Box2* l);
+Box2* delAt(Box2* l, int);
+void delNode(Box2**, int, int);
 void del(Box2**, position, position);
 bool checkValidPairs(Box2**);
