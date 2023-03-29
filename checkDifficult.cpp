@@ -1,7 +1,7 @@
 #include "checkDifficult.h"
 
 Box2* findTheNode(Box2** arr, int x, int y) {
-    if (x < 0 || x > BOARDHEIGTH + 1 || y < 0 || y > BOARDWIDTH + 1) return NULL;
+    if (x < 0 || x >= BOARDHEIGTH || y < 0 || y >= BOARDWIDTH) return NULL;
 
     Box2* temp = arr[x];
     while (temp != NULL) {
@@ -15,7 +15,7 @@ Box2* findTheNode(Box2** arr, int x, int y) {
 
 bool Icheck(Box2 **board, position p1, position p2) {
     if(p1.x == p2.x) {
-        if(p1.x == 1 || p1.x == BOARDHEIGTH + 1) {
+        if(p1.x == 0 || p1.x == BOARDHEIGTH - 1) {
             return true;
         }
 
@@ -23,15 +23,13 @@ bool Icheck(Box2 **board, position p1, position p2) {
         int maxY = max(p1.y, p2.y);
 
         if(maxY != minY + 1){
-            Box2 *temp = findTheNode(board, p1.x, minY + 1);
 
-            int i = 2;
-            while(temp == NULL && i < maxY - minY) {
-                temp = findTheNode(board, p1.x, minY + i);
+            int i = 1;
+            while(findTheNode(board, p1.x, minY + 1) == NULL && i < maxY - minY) {
                 i ++;
             }
 
-            if(temp -> j == maxY - 1) {
+            if(i == maxY - minY) {
                 return true;
             }
         }else {
@@ -40,7 +38,7 @@ bool Icheck(Box2 **board, position p1, position p2) {
 
         return false;
     }else if(p1.y == p2.y) {
-        if(p1.y == 1) {
+        if(p1.y == 0) {
             return true;
         }
 
@@ -48,22 +46,21 @@ bool Icheck(Box2 **board, position p1, position p2) {
         int minX = min(p2.x, p1.x);
 
         if(maxX != minX + 1) {
-            Box2* temp = findTheNode(board, minX + 1, p1.y);
 
-            int i = 2;
-            while(temp == NULL && i < maxX - minX) {
-                temp = findTheNode(board, minX + i, p1.y);
+            int i = 1;
+            while(findTheNode(board, minX + 1, p2.y) == NULL && i < maxX - minX) {
+                i ++;
             }
 
-            if(temp -> i == maxX - 1) {
+            if(i == maxX - minX) {
                 return true;
             }
         }else {
             return true;
         }
-
-        return true;
     }
+
+    return false;
 }
 
 bool Lcheck(Box2** board, position p1, position p2) {
@@ -204,8 +201,6 @@ bool allCheck(Box2** board, position p1, position p2) {
     if(p1.x == p2.x || p1.y == p2.y) {
         if(Icheck(board, p1, p2)) {
             return true;
-        }else if(Icheck(board, p1, p2)) {
-            return true;
         }
     }
 
@@ -223,43 +218,46 @@ bool allCheck(Box2** board, position p1, position p2) {
 
     if(UYcheck(board, p1, p2, 1)) {
         return true;
-    }else if(UYcheck(board, p1, p2, -1)) {
-        return true;
     }
 
+    if(UYcheck(board, p1, p2, -1)) {
+        return true;
+    }
 
     return false;
 }
 
 bool checkValidPairs(Box2** board) {
-    char check = 'A';
-    while (check >= 'A' && check <= 'Z') {
-        int cnt = 0;
-        int* pos = new int[BOARDHEIGTH * BOARDWIDTH];
-        for (int i = 1; i < BOARDHEIGTH + 1; i++) {
-            for (int j = 1; j < BOARDWIDTH + 1; j++) {
-                if (board[i][j].c == check && findTheNode(board, i, j) != NULL) {
-                    pos[cnt++] = i;
-                    pos[cnt++] = j;
+    Box2* Head, * temp;
+    for (int i = 1; i < BOARDHEIGTH + 1; i++) {
+        Head = board[i];
+        while (Head != NULL) {
+            int j = i;
+            temp = Head->next;
+            while (temp == NULL && j < BOARDHEIGTH) {
+                j++;
+                temp = board[j];
+            }
+            while (temp != NULL) {
+                if (Head->c == temp->c) {
+                    position p1;
+                    p1.x = Head -> i;
+                    p1.y = Head -> j;
+                    position p2;
+                    p2.x = temp -> i;
+                    p2.y = temp -> j;
+                    if (allCheck(board, p1, p2)) {
+                        return true;
+                    }
+                }
+                temp = temp->next;
+                if ((temp == NULL) && (j < BOARDHEIGTH)) {
+                    j++;
+                    temp = findTheNode(board, j, 0);
                 }
             }
+            Head = Head->next;
         }
-        for (int i = 0; i < cnt - 2; i += 2) {
-            for (int j = i + 2; j < cnt; j += 2) {
-                position p1;
-                p1.x = pos[i];
-                p1.y = pos[i + 1];
-                position p2;
-                p2.x = pos[j];
-                p2.y = pos[j + 1];
-                if (allCheck(board, p1, p2)) {
-                    delete[] pos;
-                    return true;
-                }
-            }
-        }
-        check++;
-        delete[] pos;
     }
     return false;
 }
@@ -274,42 +272,39 @@ void del(Box2** board, position p1, position p2) {
     }
 }
 
-Box2* delHead(Box2* l) {
-    Box2* temp = l;
-    temp = temp -> next;
-    delete(l);
-    return temp;
-}
+void delNode(Box2** arr, int y, int x) {
+    Box2* p = findTheNode(arr, y, x);
+    if (x == 0) {
+        if (arr[y] -> next == NULL) {
+            arr[y] -> deleteBox();
+            arr[y] = NULL;
+            return;
+        }
+        p = arr[y];
+        while(p -> next) {
+            p -> c = p -> next -> c;
+            p = p -> next;
+        }
 
-Box2* delTail(Box2* l) {
-    Box2* temp = l;
-    while(temp -> next -> next != NULL) {
-        temp = temp -> next;
+        p -> deleteBox();
+        findTheNode(arr, p -> i, p -> j - 1) -> next = NULL;
     }
-
-    delete(temp -> next);
-    temp -> next = NULL;
-    return l;
-} 
-
-Box2* delAt(Box2* l, int k) {
-    Box2 *p = l;
-	for (int i = 0; i < k - 2; i++){
-		p = p->next;
-	}
-
-	Box2 *temp = p->next;
-	p->next = p->next->next;
-	delete(temp);
-	return l;
-}
-
-void delNode(Box2** board, int x, int y) {
-    if(y == 1) {
-        board[x] = delHead(board[x]);
-    }else if(findTheNode(board, x, y) -> next == NULL) {
-        board[x] = delTail(board[x]);
-    }else {
-        board[x] = delAt(board[x], y);
+    else if (p->next != NULL) {
+        while (p->next->next != NULL)
+        {
+            p->c = p->next->c;
+            p = p->next;
+        }
+        p->c = p->next->c;
+        p->next->deleteBox();
+        delete p->next;
+        p->next = NULL;
+    }
+    else {
+        p->deleteBox();
+        delete p;
+        p = findTheNode(arr, y, x - 1);
+        p->next = NULL;
     }
 }
+

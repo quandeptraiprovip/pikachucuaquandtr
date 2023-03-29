@@ -5,6 +5,7 @@
 #include "Utility.h"
 #include "normalMode.h"
 #include "difficultMode.h"
+#include "checkDifficult.h"
 using namespace std;
 
 int main() {
@@ -13,10 +14,32 @@ int main() {
     curs_set(0);
     clear();
 
-    Box2 **board = new Box2*[BOARDHEIGTH + 2];
+    // Box2** board = new Box2*[BOARDHEIGTH + 2];
+    // initList(board);
+
+    // renderList(board);
+
+    // position p1,p2;
+
+    // p1.x = 2;
+    // p2.y = 3;
+    // p1.y = 1;
+    // p2.x = 2;
+    // move(1,1);
+    // if(Icheck(board, p1, p2)) {
+    //     printw("true");
+    // }else {
+    //     printw("false");
+    // }
+
+    player p;
+    difficultMode(p);
+
+    // Box2** board = new Box2* [BOARDHEIGTH];
+    // initList(board);
+    // renderList(board);
+    // findTheNode(board, 0, 4) -> deleteBox();
     
-    initList(board);
-    renderList(board);
 
 
     getch();

@@ -16,9 +16,9 @@ void addTail(Box2 *&list, Box2 *p) {
 }
 
 void initList(Box2** arr) {
-    for (int i = 1; i < BOARDHEIGTH + 2; i++) {
+    for (int i = 0; i < BOARDHEIGTH; i++) {
         arr[i] = NULL;
-        for (int j = 1; j < BOARDWIDTH + 2; j++) {
+        for (int j = 0; j < BOARDWIDTH; j++) {
             Box2* p = new Box2;
             p->i = i;
             p->j = j;
@@ -34,7 +34,7 @@ void initList(Box2** arr) {
         while (time)
         {
             index = rand() % (BOARDWIDTH*BOARDHEIGTH);
-            Box2* p = findTheNode(arr, index / BOARDWIDTH + 1, index % BOARDWIDTH + 1);
+            Box2* p = findTheNode(arr, index / BOARDWIDTH, index % BOARDWIDTH);
             if (p->c == ' ') {
                 p->c = c;
                 time--;
@@ -45,14 +45,13 @@ void initList(Box2** arr) {
 }
 
 void deleteList(Box2** arr) {
-    for (int i = 1; i < BOARDHEIGTH + 1; i++) {
+    for (int i = 0; i < BOARDHEIGTH; i++) {
         Box2* temp;
         while (arr[i] != NULL)
         {
             temp = arr[i];
             arr[i] = arr[i]->next;
             temp->deleteBox();
-            //if (temp->j < 4) displayBackground(BG, temp->j, i);
             delete temp;
         }
     }
@@ -60,9 +59,9 @@ void deleteList(Box2** arr) {
 }
 
 void renderList(Box2** arr) {
-    for (int i = 1; i < BOARDHEIGTH + 1; i++) {
+    for (int i = 0; i < BOARDHEIGTH; i++) {
         Box2* temp = arr[i];
-        while (temp -> next != NULL)
+        while (temp != NULL)
         {
             temp->drawBox(0);
             temp = temp->next;
@@ -71,46 +70,44 @@ void renderList(Box2** arr) {
 }
 
 void hint(Box2** board) {
-    char check = 'A';
-    while (check >= 'A' && check <= 'Z') {
-        int cnt = 0;
-        int* pos = new int[BOARDHEIGTH * BOARDWIDTH];
-        for (int i = 1; i < BOARDHEIGTH + 1; i++) {
-            for (int j = 1; j < BOARDWIDTH + 1; j++) {
-                if (board[i][j].c == check && findTheNode(board, i, j) == NULL) {
-                    pos[cnt++] = i;
-                    pos[cnt++] = j;
+    Box2* Head, * temp;
+    for (int i = 0; i < BOARDHEIGTH; i++) {
+        Head = board[i];
+        while (Head != NULL) {
+            int j = i;
+            temp = Head->next;
+            while (temp == NULL && j < BOARDHEIGTH - 1) {
+                j++;
+                temp = board[j];
+            }
+            while (temp != NULL) {
+                if (Head->c == temp->c) {
+                    position p1;
+                    p1.x = Head -> i;
+                    p1.y = Head -> j;
+                    position p2;
+                    p2.x = temp -> i;
+                    p2.y = temp -> j;
+                    if (allCheck(board, p1, p2)) {
+                        findTheNode(board ,p1.x, p2.x) -> drawBox(3);
+                        findTheNode(board, p2.x, p2.y) -> drawBox(3);
+                    }
+                }
+                temp = temp->next;
+                if ((temp == NULL) && (j < BOARDHEIGTH - 1)) {
+                    j++;
+                    temp = findTheNode(board, j, 0);
                 }
             }
+            Head = Head->next;
         }
-        for (int i = 0; i < cnt - 2; i += 2) {
-            for (int j = i + 2; j < cnt; j += 2) {
-                position p1;
-                p1.x = pos[i];
-                p1.y = pos[i + 1];
-                position p2;
-                p2.x = pos[j];
-                p2.y = pos[j + 1];
-                if (allCheck(board, p1, p2)) {
-                    board[p1.x][p1.y].drawBox(3);
-                    board[p2.x][p2.y].drawBox(3);
-                    refresh();
-                    napms(1000);
-                    delete[] pos;
-                    return;
-                }
-            }
-        }
-        check++;
-        delete[] pos;
-
-
     }
 }
 
 void move(Box2** board, position& pos, int &status, player& p, position selectedPos[], int &couple) {
     int key;
     key = getch();
+
     if(key == 'q')//key escape
     {
         status = 2;
@@ -147,11 +144,13 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                         printw("Point: %d", p.point);
 
                         p1 -> drawBox(1);
-                        p2 -> drawBox(2);
+                        p2 -> drawBox(1);
 
                         refresh();
                         napms(500);
 
+                        p1 -> isSelected = false;
+                        p2 -> isSelected = false;
                         del(board, selectedPos[0], selectedPos[1]);
                     }else {
                         p1 -> drawBox(2);
@@ -183,8 +182,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 selectedPos[1].y = -1;
 
                 // tim curPos moi
-                for (int i = pos.x; i < BOARDHEIGTH + 1; i++) {
-                    for (int j = pos.y; j < BOARDWIDTH + 1; j++) {
+                for (int i = pos.x; i < BOARDHEIGTH; i++) {
+                    for (int j = pos.y; j < BOARDWIDTH; j++) {
                         if (findTheNode(board, i, j) != NULL) {
                             pos.x = i;
                             pos.y = j;
@@ -193,8 +192,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                     }
                 }
 
-                for (int i = 1; i <= pos.x; i++) {
-                    for (int j = 1; j <= pos.y; j++) {
+                for (int i = 0; i <= pos.x; i++) {
+                    for (int j = 0; j <= pos.y; j++) {
                         if (findTheNode(board, i, j) != NULL) {
                             pos.x = i;
                             pos.y = j;
@@ -217,8 +216,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
         switch (key)
         {
         case KEY_UP:
-            for (int i = pos.y; i < BOARDWIDTH + 1; i++) {
-                for (int j = pos.x - 1; j >= 1; j--) {
+            for (int i = pos.y; i < BOARDWIDTH; i++) {
+                for (int j = pos.x - 1; j >= 0; j--) {
                     if (findTheNode(board, j, i) != NULL) {
                         pos.y = i;
                         pos.x = j;
@@ -227,8 +226,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y - 1; i >= 1; i--) {
-                for (int j = pos.x - 1; j >= 1; j--) {
+            for (int i = pos.y - 1; i >= 0; i--) {
+                for (int j = pos.x - 1; j >= 0; j--) {
                     if (findTheNode(board, j, i) != NULL) {
                         pos.x = j;
                         pos.y = i;
@@ -237,8 +236,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y; i < BOARDWIDTH + 1; i++) {
-                for (int j = BOARDHEIGTH; j > pos.x; j--) {
+            for (int i = pos.y; i < BOARDWIDTH; i++) {
+                for (int j = BOARDHEIGTH - 1; j > pos.x; j--) {
                     if (findTheNode(board, j, i) != NULL) {
                         pos.x = j;
                         pos.y = i;
@@ -247,8 +246,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y; i >= 1; i--) {
-                for (int j = BOARDHEIGTH; j > pos.x; j--) {
+            for (int i = pos.y; i >= 0; i--) {
+                for (int j = BOARDHEIGTH - 1; j > pos.x; j--) {
                     if (findTheNode(board, j, i) != NULL) {
                         pos.x = j;
                         pos.y = i;
@@ -259,8 +258,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
 
             break;
         case KEY_DOWN:
-            for (int i = pos.y; i < BOARDWIDTH + 1; i++) {
-                for (int j = pos.x + 1; j < BOARDHEIGTH + 1; j++) {
+            for (int i = pos.y; i < BOARDWIDTH; i++) {
+                for (int j = pos.x + 1; j < BOARDHEIGTH; j++) {
                     if (findTheNode(board, j, i) != NULL) {
                         pos.x = j;
                         pos.y = i;
@@ -269,8 +268,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y - 1; i >= 1; i--) {
-                for (int j = pos.x + 1; j < BOARDHEIGTH + 1; j++) {
+            for (int i = pos.y - 1; i >= 0; i--) {
+                for (int j = pos.x + 1; j < BOARDHEIGTH; j++) {
                     if (findTheNode(board, j, i) != NULL) {
                         pos.x = j;
                         pos.y = i;
@@ -279,8 +278,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y; i < BOARDWIDTH + 1; i++) {
-                for (int j = 1; j < pos.x; j++) {
+            for (int i = pos.y; i < BOARDWIDTH; i++) {
+                for (int j = 0; j < pos.x; j++) {
                     if (findTheNode(board, j, i) != NULL) {
                         pos.x = j;
                         pos.y = i;
@@ -289,8 +288,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.y - 1; i >= 1; i--) {
-                for (int j = 1; j < pos.x; j++) {
+            for (int i = pos.y - 1; i >= 0; i--) {
+                for (int j = 0; j < pos.x; j++) {
                     if (findTheNode(board, j, i) != NULL) {
                         pos.x = j;
                         pos.y = i;
@@ -300,8 +299,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
             }
             break;
         case KEY_LEFT:
-            for (int i = pos.x; i >= 1; i--) {
-                for (int j = pos.y - 1; j >= 1; j--) {
+            for (int i = pos.x; i >= 0; i--) {
+                for (int j = pos.y - 1; j >= 0; j--) {
                     if (findTheNode(board, i, j) != NULL) {
                         pos.x = i;
                         pos.y = j;
@@ -310,8 +309,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x + 1; i < BOARDHEIGTH + 1; i++) {
-                for (int j = pos.y - 1; j >= 1; j--) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
+                for (int j = pos.y - 1; j >= 0; j--) {
                     if (findTheNode(board, i, j) != NULL) {
                         pos.x = i;
                         pos.y = j;
@@ -320,8 +319,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x; i >= 1; i--) {
-                for (int j = BOARDWIDTH; j > pos.y; j--) {
+            for (int i = pos.x; i >= 0; i--) {
+                for (int j = BOARDWIDTH - 1; j > pos.y; j--) {
                     if (findTheNode(board, i, j) != NULL) {
                         pos.x = i;
                         pos.y = j;
@@ -330,8 +329,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x + 1; i < BOARDHEIGTH + 1; i++) {
-                for (int j = BOARDWIDTH; j > pos.y; j--) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
+                for (int j = BOARDWIDTH - 1; j > pos.y; j--) {
                     if (findTheNode(board, i, j) != NULL) {
                         pos.x = i;
                         pos.y = j;
@@ -341,8 +340,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
             }
             break;
         case KEY_RIGHT:
-            for (int i = pos.x; i >= 1; i--) {
-                for (int j = pos.y + 1; j < BOARDWIDTH + 1; j++) {
+            for (int i = pos.x; i >= 0; i--) {
+                for (int j = pos.y + 1; j < BOARDWIDTH; j++) {
                     if (findTheNode(board, i, j) != NULL) {
                         pos.x = i;
                         pos.y = j;
@@ -351,8 +350,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x + 1; i < BOARDHEIGTH + 1; i++) {
-                for (int j = pos.y + 1; j < BOARDWIDTH + 1; j++) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
+                for (int j = pos.y + 1; j < BOARDWIDTH; j++) {
                     if (findTheNode(board, i, j) != NULL) {
                         pos.x = i;
                         pos.y = j;
@@ -361,8 +360,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x; i >= 1; i--) {
-                for (int j = 1; j < pos.y; j++) {
+            for (int i = pos.x; i >= 0; i--) {
+                for (int j = 0; j < pos.y; j++) {
                     if (findTheNode(board, i, j) != NULL) {
                         pos.x = i;
                         pos.y = j;
@@ -371,8 +370,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                 }
             }
 
-            for (int i = pos.x + 1; i < BOARDHEIGTH + 1; i++) {
-                for (int j = 1; j < pos.y; j++) {
+            for (int i = pos.x + 1; i < BOARDHEIGTH; i++) {
+                for (int j = 0; j < pos.y; j++) {
                     if (findTheNode(board, i, j) != NULL) {
                         pos.x = i;
                         pos.y = j;
@@ -419,8 +418,8 @@ void difficultMode(player& p) {
     position selectedPos[] = { {-1, -1}, {-1, -1} };
     int couple = 2;
     position curPosition;
-    curPosition.x = 1;
-    curPosition.y = 1;
+    curPosition.x = 0;
+    curPosition.y = 0;
     int status = 0; //0. dang choi game
                     //1. het game
                     //2. nguoi choi chon thoat
@@ -429,11 +428,9 @@ void difficultMode(player& p) {
         findTheNode(board, curPosition.x, curPosition.y) -> isSelected = true;
 
         renderList(board);
-
-
         move(board, curPosition, status, p, selectedPos, couple);
 
-        if ((!checkValidPairs(board))) status = 1;
+        if((!checkValidPairs(board))) status = 1;
     }
 
     renderList(board);
