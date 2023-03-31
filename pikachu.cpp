@@ -33,7 +33,7 @@ int main() {
     // }
 
     player p;
-    difficultMode(p);
+    normalMode(p);
 
     // Box2** board = new Box2* [BOARDHEIGTH];
     // initList(board);

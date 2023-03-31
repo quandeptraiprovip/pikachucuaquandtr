@@ -188,6 +188,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                             pos.x = i;
                             pos.y = j;
                             return;
+                        }else {
+                            break;
                         }
                     }
                 }
@@ -198,6 +200,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
                             pos.x = i;
                             pos.y = j;
                             return;
+                        }else {
+                            break;
                         }
                     }
                 }

@@ -1,7 +1,7 @@
 #include "normalMode.h"
 #include "checkNormal.h"
-#include<cstdlib>
-#include<ctime>
+#include <cstdlib>
+#include <ctime>
 #include <unistd.h>
 
 void initBoard(Box1** board) {
@@ -11,7 +11,7 @@ void initBoard(Box1** board) {
             board[i][j].j = j;
             board[i][j].i = i;
 
-            if(i == 0 || i == BOARDHEIGTH + 1 || j ==0 || j == BOARDWIDTH + 1) {
+            if(i == 0 || i == BOARDHEIGTH + 1 || j == 0 || j == BOARDWIDTH + 1) {
                 board[i][j].isValid = false;
             }
         }
