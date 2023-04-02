@@ -21,7 +21,7 @@ int mainMenu() {
         init_pair(2, COLOR_YELLOW, COLOR_BLACK);
         attron(COLOR_PAIR(2));
         mvprintw(0, 6, " ______    __   __  ___      ___       ______  __    __   __    __");
-        mvprintw(1, 6, "|   _  \\  |  | |  |/  /     /   \\     /      ||  |  |  | |  |  |  |");
+        mvprintw(1, 6, "|   _  \\ |  | |  |/  /     /   \\     /      ||  |  |  | |  |  |  |");
         mvprintw(2, 6, "|  |_)  | |  | |  '  /     /  ^  \\   |  ,----'|  |__|  | |  |  |  |");
         mvprintw(3, 6, "|   ___/  |  | |    <     /  /_\\  \\  |  |     |   __   | |  |  |  |");
         mvprintw(4, 6, "|  |      |  | |  .  \\   /  _____  \\ |  `----.|  |  |  | |  `--'  |");
@@ -158,35 +158,19 @@ void readLeaderBoard() {
 
     delete[] players;
     f.close();
-
-    getch();
-    clear();
-
     refresh();
-
-
-
-    // Wait for user input
     getch();
-
-    // Clean up
     endwin();
+
 }
 
 void writeLeaderBoard(player p) {
-    initscr();
-    cbreak();
-    noecho();
-    curs_set(0);
-
-    clear();
-
     ifstream fin("leaderboard.dat", ios::binary);
 
-    player *list = new player[10];
     fin.seekg(0, ios::end);
     int numberOfPlayers = fin.tellg() / 34; // file size / struct size
     fin.seekg(0, ios::beg);
+    player *list = new player[10];
 
     for(int i = 0; i < numberOfPlayers; i ++) {
         fin.read(list[i].name, 30);
@@ -206,6 +190,7 @@ void writeLeaderBoard(player p) {
             list[i] = list[i - 1];
         }
         list[index + 1] = p;
+        numberOfPlayers ++;
     }else {
         if(index != numberOfPlayers - 1) {
             for(int i = numberOfPlayers - 1; i > index + 1; i--) {
@@ -227,21 +212,6 @@ void writeLeaderBoard(player p) {
     fout.close();
 
     delete[] list;
-
-
-
-    getch();
-    clear();
-
-    refresh();
-
-
-
-    // Wait for user input
-    getch();
-
-    // Clean up
-    endwin();
 }
 
 void getPlayerInfo(player& p) {
@@ -355,17 +325,10 @@ void displayStatus(bool win) {
 
     attroff(COLOR_PAIR(1));
 
-    getch();
-    clear();
-
     refresh();
+    napms(1000);
 
 
-
-    // Wait for user input
-    getch();
-
-    // Clean up
     endwin();
 }
 

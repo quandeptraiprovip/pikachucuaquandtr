@@ -5,5 +5,5 @@ int mainMenu();
 void displayStatus(bool);
 void getPlayerInfo(player&);
 void readLeaderBoard();
-void writeLeaderBoard();
+void writeLeaderBoard(player);
 //void getBackGround(char [][41]);

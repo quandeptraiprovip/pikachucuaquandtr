@@ -21,22 +21,18 @@ bool Icheck(Box2 **board, position p1, position p2) {
 
         int minY = min(p1.y, p2.y);
         int maxY = max(p1.y, p2.y);
+        int i = 1;
 
-        if(maxY != minY + 1){
-
-            int i = 1;
-            while(findTheNode(board, p1.x, minY + 1) == NULL && i < maxY - minY) {
-                i ++;
-            }
-
-            if(i == maxY - minY) {
-                return true;
-            }
-        }else {
-            return true;
+        while(minY + i < maxY && findTheNode(board, p1.x, minY + i) == NULL) {
+            i ++;
         }
 
-        return false;
+        if(i == maxY - minY) {
+            return true;
+        }else {
+            return false;
+        }
+
     }else if(p1.y == p2.y) {
         if(p1.y == 0) {
             return true;
@@ -45,18 +41,15 @@ bool Icheck(Box2 **board, position p1, position p2) {
         int maxX = max(p2.x, p1.x);
         int minX = min(p2.x, p1.x);
 
-        if(maxX != minX + 1) {
+        int i = 1;
+        while(minX + i < maxX && findTheNode(board, minX + i, p1.y) == NULL) {
+            i++;
+        }
 
-            int i = 1;
-            while(findTheNode(board, minX + 1, p2.y) == NULL && i < maxX - minX) {
-                i ++;
-            }
-
-            if(i == maxX - minX) {
-                return true;
-            }
-        }else {
+        if(i == maxX - minX) {
             return true;
+        }else {
+            return false;
         }
     }
 
@@ -146,11 +139,24 @@ bool UXcheck(Box2 **board, position p1, position p2) {
     position t;
     t.x = maxP.x;
     t.y = maxP.y + 1;
+    if(p2.y != p1.y) {
+        if(Icheck(board, minP, p) && findTheNode(board, p.x, p.y) == NULL) {
+            p.y ++;
+            while(p.y < BOARDWIDTH + 1 && findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
+                if(Icheck(board, p, t)) {
+                    return true;
+                }
 
-    if(Icheck(board, minP, p) && findTheNode(board, p.x, p.y) == NULL) {
+                p.y ++;
+                t.y ++;
+            }
+        }
+    }else {
         p.y ++;
-        while(findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
-            if(Icheck(board, p,t)) {
+        t.y ++;
+
+        while(p.y < BOARDWIDTH + 1 && findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
+            if(Icheck(board, p, t)) {
                 return true;
             }
 
@@ -183,15 +189,31 @@ bool UYcheck(Box2** board, position p1, position p2, int mode) {
     position p, t;
     p.x = maxP.x + mode;
     p.y = maxP.y;
-    t.x = maxP.x + mode;
+    t.x = maxP.x;
     t.y = minP.y;
-
-    while(findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
-        if(Icheck(board, p, t)) {
-            return true;
+    if(p.x != t.x) {
+        if(Icheck(board, minP, t) && findTheNode(board, t.x, t.y) ==  NULL){
+            t.x += mode;
+            while(t.x < BOARDHEIGTH + 1 && findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
+                if(Icheck(board, p, t)) {
+                    return true;
+                }
+                p.x += mode;
+                t.x += mode;
+            }
         }
+    }else {
         p.x += mode;
         t.x += mode;
+
+        while(p.x < BOARDHEIGTH + 1 && findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
+            if(Icheck(board, p, t)) {
+                return true;
+            }
+
+            p.x += mode;
+            t.x += mode;
+        }
     }
 
     return false;

@@ -11,7 +11,7 @@ using namespace std;
 
 struct player {
 	char name[30];
-	int point, life;
+	int point, life, hint;
 };
 
 struct position {

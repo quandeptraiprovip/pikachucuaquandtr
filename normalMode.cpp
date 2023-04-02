@@ -1,4 +1,5 @@
 #include "normalMode.h"
+#include "Utility.h"
 #include "checkNormal.h"
 #include <cstdlib>
 #include <ctime>
@@ -393,6 +394,8 @@ void normalMode(player& p) {
     printw("Point: %d", p.point);
     move (0,COLS - 25);
     printw("Life: %d", p.life);
+    move(1, COLS - 25);
+    printw("Hint: %d", p.hint);
 
     move (5, COLS - 17);
     printw("- Press arrow key");
@@ -437,20 +440,18 @@ void normalMode(player& p) {
 
     if (p.life || status == 1) {
         displayStatus(1);
-        refresh();
-        napms(5000);
-        move(LINES/2 - 20, COLS/2);
-        char c;
+        clear();
+        move(LINES/2 + 3, COLS/2 - 202);
+        int c;
         printw("Do you want to continue next game? (Y/N): ");
-        cin >> c;
-        cin.ignore();
+        c = getch();
         system("cls");
         if (c == 'y' || c == 'Y') normalMode(p);
-        //else writeLeaderBoard(p);
+        else writeLeaderBoard(p);
     }
     else if (p.life == 0) {
         displayStatus(0);
-        //writeLeaderBoard(p);
+        writeLeaderBoard(p);
     }
     clear();
 }

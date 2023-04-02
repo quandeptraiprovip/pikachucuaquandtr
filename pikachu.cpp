@@ -32,14 +32,19 @@ int main() {
     //     printw("false");
     // }
 
+    // player p;
+    // char name[30] = "yoyo";
+    // strcpy(p.name, name);
+    // p.point = 200;
+    // normalMode(p);
+
     player p;
-    normalMode(p);
+    difficultMode(p);
 
     // Box2** board = new Box2* [BOARDHEIGTH];
     // initList(board);
     // renderList(board);
     // findTheNode(board, 0, 4) -> deleteBox();
-    
 
 
     getch();

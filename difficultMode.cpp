@@ -89,8 +89,11 @@ void hint(Box2** board) {
                     p2.x = temp -> i;
                     p2.y = temp -> j;
                     if (allCheck(board, p1, p2)) {
-                        findTheNode(board ,p1.x, p2.x) -> drawBox(3);
+                        findTheNode(board ,p1.x, p1.y) -> drawBox(3);
                         findTheNode(board, p2.x, p2.y) -> drawBox(3);
+                        refresh();
+                        napms(500);
+                        return;
                     }
                 }
                 temp = temp->next;
@@ -100,8 +103,10 @@ void hint(Box2** board) {
                 }
             }
             Head = Head->next;
+            i++;
         }
     }
+
 }
 
 void move(Box2** board, position& pos, int &status, player& p, position selectedPos[], int &couple) {
@@ -208,7 +213,9 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
             }
         }
     }else if(key == 'h') {
-        hint(board);
+        if(p.hint > 0) {
+            hint(board);    
+        }
     }
     else //neu la dau mui ten
     {
@@ -401,6 +408,8 @@ void difficultMode(player& p) {
     printw("Point: %d", p.point);
     move (0,COLS - 25);
     printw("Life: %d", p.life);
+    move(1, COLS - 25);
+    printw("Hint: %d", p.hint);
 
     move (5, COLS - 17);
     printw("- Press arrow key");

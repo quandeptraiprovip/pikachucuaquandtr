@@ -125,6 +125,7 @@ bool checkUX(Box1** board, position p1, position p2, int type) {
 
     if(p1.x != p2.x) {
         if (checkLineX(board,pMinY.y, pMaxY.y, row) && board[row][y].isValid == false) {
+            y += type;
             while (board[pMinY.x][y].isValid == false && board[pMaxY.x][y].isValid == false && (y >= 0 && y <= BOARDWIDTH + 1)) {
                 if (checkLineY(board, pMinY.x, pMaxY.x, y)) {
                 return true;
@@ -134,12 +135,12 @@ bool checkUX(Box1** board, position p1, position p2, int type) {
             }
         }
     }else {
-        if(checkLineX(board, pMaxY.y, pMinY.y, row + 1) && board[row + 1][pMinY.y].isValid == false && board[row + 1][pMaxY.y].isValid == false) {
-            return true;
-        }
-
-        if(checkLineX(board, pMaxY.y, pMinY.y, row - 1) && board[row - 1][pMinY.y].isValid == false && board[row - 1][pMaxY.y].isValid == false) {
-            return true;
+        y += type;
+        while(y >= 0 && y <= BOARDWIDTH + 1 && board[pMaxY.x][y].isValid == false && board[pMinY.x][y].isValid == false) {
+            if(checkLineY (board, y, pMaxY.x, pMinY.x)) {
+                return true;
+            }
+            y += type;
         }
     }
 
@@ -162,6 +163,7 @@ bool checkUY(Box1** board, position p1, position p2, int type) {
 
     if(p1.y != p2.y) {
         if (checkLineY(board ,pMinX.x, pMaxX.x, col) && board[x][col].isValid == false) {
+            x += type;
             while (board[x][pMinX.y].isValid == false && board[x][pMaxX.y].isValid == false && (x >= 0 && x <= BOARDHEIGTH + 1)) {
                 if (checkLineX(board ,pMinX.y, pMaxX.y, x)) {
                     return true;
@@ -171,12 +173,12 @@ bool checkUY(Box1** board, position p1, position p2, int type) {
             }
         }
     }else {
-        if(checkLineY(board, pMinX.x, pMaxX.x, col + 1) && board[pMaxX.x][col + 1].isValid == false && board[pMinX.x][col + 1].isValid == false) {
-            return true;
-        }
-
-        if(checkLineY(board, pMinX.x, pMaxX.x, col - 1) && board[pMaxX.x][col - 1].isValid == false && board[pMinX.x][col - 1].isValid == false) {
-            return true;
+        x += type;
+        while(x >= 0 && x <= BOARDHEIGTH + 1 && board[x][pMinX.y].isValid == false && board[x][pMaxX.y].isValid == false) {
+            if(checkLineX (board, x, pMaxX.x, pMinX.y)) {
+                return true;
+            }
+            x += type;
         }
     }
 
