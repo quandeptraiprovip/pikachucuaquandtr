@@ -1,3 +1,4 @@
+
 #include "difficultMode.h"
 #include "checkDifficult.h"
 
@@ -27,16 +28,18 @@ void initList(Box2** arr) {
         }
     }
 
+    srand(time(NULL));
+
     int flagNum = BOARDWIDTH*BOARDHEIGTH / 2;
     while (flagNum) {
         int index, time = 2;
-        char c = 65 + rand() % 26;
+        char a = 65 + rand() % 26;
         while (time)
         {
             index = rand() % (BOARDWIDTH*BOARDHEIGTH);
             Box2* p = findTheNode(arr, index / BOARDWIDTH, index % BOARDWIDTH);
-            if (p->c == ' ') {
-                p->c = c;
+            if (p -> c == ' ') {
+                p -> c = a;
                 time--;
             }
         }
@@ -88,7 +91,23 @@ void hint(Box2** board) {
                     position p2;
                     p2.x = temp -> i;
                     p2.y = temp -> j;
-                    if (allCheck(board, p1, p2)) {
+
+                    int k = allCheck(board, p1, p2);
+                    if (k) {
+                        move(0, 10);
+                        if(k == 1) {
+                            printw("I");
+                        }else if(k == 2) {
+                            printw("L");
+                        }else if(k == 3) {
+                            printw("Z");
+                        }else if(k == 4) {
+                            printw("UX");
+                        }else if(k == 5) {
+                            printw("UY");
+                        }else if(k == 6) {
+                            printw("UY");
+                        }
                         findTheNode(board ,p1.x, p1.y) -> drawBox(3);
                         findTheNode(board, p2.x, p2.y) -> drawBox(3);
                         refresh();
@@ -214,7 +233,8 @@ void move(Box2** board, position& pos, int &status, player& p, position selected
         }
     }else if(key == 'h') {
         if(p.hint > 0) {
-            hint(board);    
+            hint(board); 
+            p.hint --;   
         }
     }
     else //neu la dau mui ten
@@ -450,22 +470,24 @@ void difficultMode(player& p) {
     deleteList(board);
     clear();
 
-//     if (p.life || status == 1) {
-//         displayStatus(1);
-//         refresh();
-//         napms(5000);
-//         move(LINES/2 - 20, COLS/2);
-//         char c;
-//         printw("Do you want to continue next game? (Y/N): ");
-//         cin >> c;
-//         cin.ignore();
-//         system("cls");
-//         if (c == 'y' || c == 'Y') difficultMode(p);
-//         //else writeLeaderBoard(p);
-//     }
-//     else if (p.life == 0) {
-//         displayStatus(0);
-//         //writeLeaderBoard(p);
-//     }
-//     clear();
+    if (p.life || status == 1) {
+        displayStatus(1);
+        clear();
+        move(LINES/2 + 3, COLS/2 - 202);
+        int c;
+        printw("Do you want to continue next game? (Y/N): ");
+        c = getch();
+        clear();
+        if (c == 'y' || c == 'Y') {
+            difficultMode(p);
+        }
+        else {
+            writeLeaderBoard(p);
+        }
     }
+    else if (p.life == 0) {
+        displayStatus(0);
+        writeLeaderBoard(p);
+    }
+    clear();
+}

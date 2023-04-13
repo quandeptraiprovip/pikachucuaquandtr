@@ -13,7 +13,7 @@ bool UYcheck(Box2**, position, position, int mode);
 //check u right
 bool UXcheck(Box2**, position, position);
 bool Zcheck(Box2**, position, position);
-bool allCheck(Box2**, position, position);
+int allCheck(Box2**, position, position);
 void delNode(Box2**, int, int);
 void del(Box2**, position, position);
 bool checkValidPairs(Box2**);

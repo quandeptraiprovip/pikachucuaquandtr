@@ -15,9 +15,8 @@ Box2* findTheNode(Box2** arr, int x, int y) {
 
 bool Icheck(Box2 **board, position p1, position p2) {
     if(p1.x == p2.x) {
-        if(p1.x == 0 || p1.x == BOARDHEIGTH - 1) {
-            return true;
-        }
+
+        if(p1.y == p2.y) return false;
 
         int minY = min(p1.y, p2.y);
         int maxY = max(p1.y, p2.y);
@@ -34,9 +33,10 @@ bool Icheck(Box2 **board, position p1, position p2) {
         }
 
     }else if(p1.y == p2.y) {
-        if(p1.y == 0) {
-            return true;
-        }
+
+        if(p1.x == p2.x) return false;
+
+        if(p1.y == 0) return true;
 
         int maxX = max(p2.x, p1.x);
         int minX = min(p2.x, p1.x);
@@ -106,7 +106,7 @@ bool Zcheck(Box2** board, position p1, position p2) {
         maxP = p2;
     }
 
-    for(int i = maxP.x - 1; i > minP.x; i --) {
+    for(int i = maxP.y - 1; i > minP.y; i --) {
         position p;
         p.x = maxP.x;
         p.y = i;
@@ -138,11 +138,12 @@ bool UXcheck(Box2 **board, position p1, position p2) {
     p.y = maxP.y;
     position t;
     t.x = maxP.x;
-    t.y = maxP.y + 1;
+    t.y = maxP.y;
     if(p2.y != p1.y) {
         if(Icheck(board, minP, p) && findTheNode(board, p.x, p.y) == NULL) {
             p.y ++;
-            while(p.y < BOARDWIDTH + 1 && findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
+            t.y ++;
+            while((p.y < BOARDWIDTH + 1 && p.y > -2) && findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
                 if(Icheck(board, p, t)) {
                     return true;
                 }
@@ -155,7 +156,7 @@ bool UXcheck(Box2 **board, position p1, position p2) {
         p.y ++;
         t.y ++;
 
-        while(p.y < BOARDWIDTH + 1 && findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
+        while((p.y <= BOARDWIDTH && p.y > -2) && findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
             if(Icheck(board, p, t)) {
                 return true;
             }
@@ -187,13 +188,14 @@ bool UYcheck(Box2** board, position p1, position p2, int mode) {
     }
 
     position p, t;
-    p.x = maxP.x + mode;
+    p.x = maxP.x;
     p.y = maxP.y;
     t.x = maxP.x;
     t.y = minP.y;
-    if(p.x != t.x) {
+    if(p1.x != p2.x) {
         if(Icheck(board, minP, t) && findTheNode(board, t.x, t.y) ==  NULL){
             t.x += mode;
+            p.x += mode;
             while(t.x < BOARDHEIGTH + 1 && findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
                 if(Icheck(board, p, t)) {
                     return true;
@@ -206,7 +208,7 @@ bool UYcheck(Box2** board, position p1, position p2, int mode) {
         p.x += mode;
         t.x += mode;
 
-        while(p.x < BOARDHEIGTH + 1 && findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
+        while((p.x < BOARDHEIGTH + 1 && p.x > -2) && findTheNode(board, p.x, p.y) == NULL && findTheNode(board, t.x, t.y) == NULL) {
             if(Icheck(board, p, t)) {
                 return true;
             }
@@ -219,34 +221,34 @@ bool UYcheck(Box2** board, position p1, position p2, int mode) {
     return false;
 }
 
-bool allCheck(Box2** board, position p1, position p2) {
+int allCheck(Box2** board, position p1, position p2) {
     if(p1.x == p2.x || p1.y == p2.y) {
         if(Icheck(board, p1, p2)) {
-            return true;
+            return 1;
         }
     }
 
     if(Lcheck(board, p1, p2)) {
-        return true;
+        return 2;
     }
 
     if(Zcheck(board, p1, p2)) {
-        return true;
+        return 3;
     }
 
     if(UXcheck(board, p1, p2)) {
-        return true;
+        return 4;
     }
 
     if(UYcheck(board, p1, p2, 1)) {
-        return true;
+        return 5;
     }
 
     if(UYcheck(board, p1, p2, -1)) {
-        return true;
+        return 6;
     }
 
-    return false;
+    return 0;
 }
 
 bool checkValidPairs(Box2** board) {
@@ -285,7 +287,7 @@ bool checkValidPairs(Box2** board) {
 }
 
 void del(Box2** board, position p1, position p2) {
-    if(p1.x > p2.x) {
+    if(p1.y > p2.y) {
         delNode(board, p1.x, p1.y);
         delNode(board, p2.x, p2.y);
     }else {
@@ -300,6 +302,7 @@ void delNode(Box2** arr, int y, int x) {
         if (arr[y] -> next == NULL) {
             arr[y] -> deleteBox();
             arr[y] = NULL;
+            delete p;
             return;
         }
         p = arr[y];
@@ -310,6 +313,7 @@ void delNode(Box2** arr, int y, int x) {
 
         p -> deleteBox();
         findTheNode(arr, p -> i, p -> j - 1) -> next = NULL;
+        delete p;
     }
     else if (p->next != NULL) {
         while (p->next->next != NULL)

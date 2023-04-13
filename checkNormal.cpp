@@ -2,7 +2,8 @@
 
 bool checkLineX (Box1** board, int y1, int y2, int x) {
 
-    if(x == 1 || x == BOARDHEIGTH) return true;;
+    if(x == 1 || x == BOARDHEIGTH) return true;
+    if(y1 == y2) return false;
 
     int maxY = max(y1, y2);
     int minY = min(y1, y2);
@@ -23,6 +24,7 @@ bool checkLineX (Box1** board, int y1, int y2, int x) {
 bool checkLineY(Box1** board, int x1, int x2, int y) {
 
     if(y == 1 || y == BOARDWIDTH) return true;
+    if(x1 == x2) return false;
 
     int maxX = max(x1, x2);
     int minX = min(x1, x2);

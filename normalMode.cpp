@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <unistd.h>
+#include "difficultMode.h"
 
 void initBoard(Box1** board) {
     for (int i = 0; i < BOARDHEIGTH + 2; i++) { // gan vi tri cho tung o mot
@@ -122,7 +123,7 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
             selectedPos[0].x = -1;
             selectedPos[0].y = -1;
             p.life--;
-            move (0,50);
+            move (0, COLS - 25);
             printw("Life: %d", p.life);
         }else {
             selectedPos[2 - couple].x = pos.x;
@@ -156,7 +157,7 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                         napms(500);
 
                         p.life--;
-                        move (0,50);
+                        move (0, COLS - 25);
                         printw("Life: %d", p.life);
                     }
                 }else {
@@ -167,7 +168,7 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
                     napms(500);
 
                     p.life--;
-                    move (0,50);
+                    move (0, COLS - 25);
                     printw("Life: %d", p.life);
                 }
 
@@ -202,7 +203,12 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
             }
         }
     }else if(key == 'h') {
-        hint(board);
+        if(p.hint > 0) {
+            hint(board);    
+            p.hint --;
+            move(1, COLS - 25);
+            printw("Hint: %d", p.hint);
+        }
     }
     else //neu la dau mui ten
     {
@@ -445,9 +451,13 @@ void normalMode(player& p) {
         int c;
         printw("Do you want to continue next game? (Y/N): ");
         c = getch();
-        system("cls");
-        if (c == 'y' || c == 'Y') normalMode(p);
-        else writeLeaderBoard(p);
+        clear();
+        if (c == 'y' || c == 'Y') {
+            difficultMode(p);
+        }
+        else {
+            writeLeaderBoard(p);
+        }
     }
     else if (p.life == 0) {
         displayStatus(0);
@@ -455,25 +465,3 @@ void normalMode(player& p) {
     }
     clear();
 }
-
-
-// chua sua phan move
-// move(0, 2);
-// printw("Name: ");
-// move (0, 30);
-// printw("Point: ");
-// move (0,50);
-// printw("Life: ");
-// move (5, 63);
-// printw("- Press arrow key");
-// move (6, 68);
-// printw("to move");
-// move (8, 63);
-// printw("- Press ENTER key");
-// move(9, 68);
-// printw("to choose");
-// move (11, 63);
-// printw("- Press ESC key");
-// move (12, 68);
-// printw("to quit");
-//dcm //main

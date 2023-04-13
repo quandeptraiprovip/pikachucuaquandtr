@@ -38,8 +38,7 @@ int main() {
     // p.point = 200;
     // normalMode(p);
 
-    player p;
-    difficultMode(p);
+    readLeaderBoard();
 
     // Box2** board = new Box2* [BOARDHEIGTH];
     // initList(board);

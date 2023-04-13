@@ -50,10 +50,10 @@ int mainMenu() {
                 mvprintw(11 + i, COLS/2 - 8, "             ");
             }
 
-            mvprintw(12, COLS/2 - 8 + 2, "DIFFICULT");
+            mvprintw(12, COLS/2 - 8 + 2, "SAVED GAMES");
             attroff(COLOR_PAIR(1));
         }else {
-            mvprintw(12, COLS/2 - 8 + 2, "DIFFICULT");
+            mvprintw(12, COLS/2 - 8 + 2, "SAVED GAMES");
         }
 
         if(choice[2]) {
@@ -220,6 +220,7 @@ void getPlayerInfo(player& p) {
     getnstr(p.name, 30);
     p.life = 3;
     p.point = 0;
+    p.hint = 3;
 
 }
 
