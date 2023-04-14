@@ -6,11 +6,13 @@
 #include "normalMode.h"
 #include "difficultMode.h"
 #include "checkDifficult.h"
+#include "drawLine.h"
 using namespace std;
 
 int main() {
     initscr();
     keypad(stdscr, TRUE);
+    cbreak();
     curs_set(0);
     clear();
 
@@ -38,18 +40,22 @@ int main() {
     // p.point = 200;
     // normalMode(p);
 
-    readLeaderBoard();
+    player p;
+    normalMode(p);
+
+
+
 
     // Box2** board = new Box2* [BOARDHEIGTH];
     // initList(board);
     // renderList(board);
     // findTheNode(board, 0, 4) -> deleteBox();
 
+    refresh();
 
     getch();
     clear();
 
-    refresh();
 
 
     // Clean up

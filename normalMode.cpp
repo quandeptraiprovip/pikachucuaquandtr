@@ -5,6 +5,7 @@
 #include <ctime>
 #include <unistd.h>
 #include "difficultMode.h"
+#include "drawLine.h"
 
 void initBoard(Box1** board) {
     for (int i = 0; i < BOARDHEIGTH + 2; i++) { // gan vi tri cho tung o mot
@@ -59,6 +60,52 @@ void deleteBoard(Box1** board) {
         delete[]board[i];
     }
     delete[]board;
+}
+
+void draw(position p1, position p2 ,int x) {
+    if(x == 1) {
+        drawI(p1, p2);
+        return; 
+    }
+
+    int a = x / 100;
+
+    switch(a) {
+        case 2:
+            drawZ(p1, p2, (x/10 - 20), x%10);
+            break;
+        case 3:
+            drawU(p1, p2, (x/10 - 30), x%10);
+            break;
+        case 4:
+            drawL(p1, p2, x%10);
+            break;
+        default:
+            break;
+    }
+}
+
+void del(position p1, position p2, int x) {
+    if(x == 1) {
+        delI(p1, p2);
+        return; 
+    }
+
+    int a = x / 100;
+
+    switch(a) {
+        case 2:
+            delZ(p1, p2, (x/10 - 20), x%10);
+            break;
+        case 3:
+            delU(p1, p2, (x/10 - 30), x%10);
+            break;
+        case 4:
+            delL(p1, p2, x%10);
+            break;
+        default:
+            break;
+    }
 }
 
 void hint(Box1** board) {
@@ -134,21 +181,53 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
             if(couple == 0) {
                 if (board[selectedPos[0].x][selectedPos[0].y].c == board[selectedPos[1].x][selectedPos[1].y].c) {
                     if (allcheck(board, selectedPos[0], selectedPos[1])) {
+                        int x = allcheck(board, selectedPos[0], selectedPos[1]);
+
                         p.point += 20;
-                        move (0, 30);
-                        printw("Point: %d", p.point);
 
                         board[selectedPos[0].x][selectedPos[0].y].drawBox(1);
                         board[selectedPos[1].x][selectedPos[1].y].drawBox(1);
+                        draw(selectedPos[0], selectedPos[1], x);
+
+                        move (0, 30);
+                        printw("Point: %d", p.point);
 
                         refresh();
                         napms(500);
+
+                        del(selectedPos[0], selectedPos[1], x);
 
                         board[selectedPos[0].x][selectedPos[0].y].isValid = 0;
                         board[selectedPos[0].x][selectedPos[0].y].deleteBox();
 
                         board[selectedPos[1].x][selectedPos[1].y].isValid = 0;
                         board[selectedPos[1].x][selectedPos[1].y].deleteBox();
+
+                        move(0, 2);
+                        printw("Name: %s", p.name);
+                        move (0, 30);
+                        printw("Point: %d", p.point);
+                        move (0,COLS - 25);
+                        printw("Life: %d", p.life);
+                        move(1, COLS - 25);
+                        printw("Hint: %d", p.hint);
+
+                        move (5, COLS - 17);
+                        printw("- Press arrow key");
+                        move (6, 68);
+                        printw("to move");
+                        move (8, COLS - 17);
+                        printw("- Press ENTER key");
+                        move(9, 68);
+                        printw("to choose");
+                        move (11, COLS - 17);
+                        printw("- Press ESC key");
+                        move (12, 68);
+                        printw("to quit");
+                        move(14, COLS - 17);
+                        printw("-   Press H ");
+                        move(15, 66);
+                        printw("to get hint");
                     }else {
                         board[selectedPos[0].x][selectedPos[0].y].drawBox(2);
                         board[selectedPos[1].x][selectedPos[1].y].drawBox(2);
