@@ -475,7 +475,7 @@ void difficultMode(player& p) {
         clear();
         move(LINES/2 + 3, COLS/2 - 202);
         int c;
-        printw("Do you want to continue next game? (Y/N): ");
+        printw("Do you want to play game again? (Y/N): ");
         c = getch();
         clear();
         if (c == 'y' || c == 'Y') {

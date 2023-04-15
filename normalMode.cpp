@@ -7,6 +7,8 @@
 #include "difficultMode.h"
 #include "drawLine.h"
 
+char bg[20][41];
+
 void initBoard(Box1** board) {
     for (int i = 0; i < BOARDHEIGTH + 2; i++) { // gan vi tri cho tung o mot
         board[i] = new Box1[BOARDWIDTH + 2];
@@ -199,9 +201,11 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
 
                         board[selectedPos[0].x][selectedPos[0].y].isValid = 0;
                         board[selectedPos[0].x][selectedPos[0].y].deleteBox();
+                        if (selectedPos[0].y < 5) displayBG(bg, selectedPos[0].x, selectedPos[0].y);
 
                         board[selectedPos[1].x][selectedPos[1].y].isValid = 0;
                         board[selectedPos[1].x][selectedPos[1].y].deleteBox();
+                        if (selectedPos[1].y < 5) displayBG(bg, selectedPos[1].x, selectedPos[1].y);
 
                         move(0, 2);
                         printw("Name: %s", p.name);
@@ -469,6 +473,8 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
 }
 
 void normalMode(player& p) {
+
+    getBG(bg);
 
     Box1** board = new Box1 * [BOARDHEIGTH + 2];
     initBoard(board);

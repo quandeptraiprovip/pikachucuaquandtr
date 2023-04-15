@@ -12,7 +12,7 @@ int mainMenu() {
 
     
 
-    int choice[4] = { 0,0,0,0 }, temp, key, curChoice = 0;
+    int choice[3] = { 0,0,0 }, temp, key, curChoice = 0;
     while(1) {
 
 
@@ -38,11 +38,12 @@ int mainMenu() {
                 mvprintw(8 + i, COLS/2 - 8, "             ");
             }
 
-            mvprintw(9, COLS/2 - 8 + 4, "NORMAL");
+            mvprintw(9, COLS/2 - 8 + 5, "PLAY");
             attroff(COLOR_PAIR(1));
         }else {
-            mvprintw(9, COLS/2 - 8 + 4, "NORMAL");
+            mvprintw(9, COLS/2 - 8 + 5, "PLAY");
         }
+
 
         if(choice[1]) {
             attron(COLOR_PAIR(1));
@@ -50,10 +51,10 @@ int mainMenu() {
                 mvprintw(11 + i, COLS/2 - 8, "             ");
             }
 
-            mvprintw(12, COLS/2 - 8 + 2, "SAVED GAMES");
+            mvprintw(12, COLS/2 - 8 + 1, "LEADERBOARD");
             attroff(COLOR_PAIR(1));
         }else {
-            mvprintw(12, COLS/2 - 8 + 2, "SAVED GAMES");
+            mvprintw(12, COLS/2 - 8 + 1, "LEADERBOARD");
         }
 
         if(choice[2]) {
@@ -62,22 +63,10 @@ int mainMenu() {
                 mvprintw(14 + i, COLS/2 - 8, "             ");
             }
 
-            mvprintw(15, COLS/2 - 8 + 1, "LEADERBOARD");
+            mvprintw(15, COLS/2 - 8 + 5, "EXIT");
             attroff(COLOR_PAIR(1));
         }else {
-            mvprintw(15, COLS/2 - 8 + 1, "LEADERBOARD");
-        }
-
-        if(choice[3]) {
-            attron(COLOR_PAIR(1));
-            for (int i = 0; i < 3; i++) {
-                mvprintw(17 + i, COLS/2 - 8, "             ");
-            }
-
-            mvprintw(18, COLS/2 - 8 + 5, "EXIT");
-            attroff(COLOR_PAIR(1));
-        }else {
-            mvprintw(18, COLS/2 - 8 + 5, "EXIT");
+            mvprintw(15, COLS/2 - 8 + 5, "EXIT");
         }
 
         key = getch();
@@ -93,12 +82,12 @@ int mainMenu() {
                 if(curChoice > 0) {
                     curChoice --;
                 }else {
-                    curChoice = 3;
+                    curChoice = 2;
                 }
                 break;
             case KEY_DOWN:
                 choice[curChoice] = 0;
-                if(curChoice < 3) {
+                if(curChoice < 2) {
                     curChoice ++;
                 }else {
                     curChoice = 0;
@@ -224,6 +213,42 @@ void getPlayerInfo(player& p) {
 
 }
 
+void getBG(char bg[][41]) {
+    ifstream fin("pika.txt");
+    if (fin) {
+        for (int i = 0; i < 20; i++)
+        {
+            for (int j = 0; j < 41; j++)
+            {
+                bg[i][j] = fin.get();
+            }
+            fin.ignore();
+        }
+        fin.close();
+    }
+    else {
+        memset(bg, ' ', sizeof(bg));
+    }
+}
+
+void displayBG(char bg[][41], int x, int y) {
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 11; j++) {
+            move(4*(x - 1) + 2 + i,(y - 1)*10 + 2 + j);
+            printw("%c", bg[(x - 1) * 4 + i][(y - 1) * 10 + j]);
+        }
+    }
+}
+
+void getfullBG(char bg[][41]) {
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 41; j++) {
+            move(i, j);
+            printw("%c", bg[i][j]);
+        }
+    }
+}
+
 void displayStatus(bool win) {
     initscr();
     cbreak();
@@ -332,7 +357,3 @@ void displayStatus(bool win) {
 
     endwin();
 }
-
-//void getBackGround
-
-//void displayBG

@@ -198,8 +198,6 @@ void Box2::drawBox(int mode) {
             attron(COLOR_PAIR(1));
             move(4*x + 2 + 2, y*10 + 2 + 5);
             printw("%c", c);
-            move(4*x + 2 + 3, y*10 + 2 + 5);
-            printw("%d %d", i, j);
             attroff(COLOR_PAIR(1));
         }
     }

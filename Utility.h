@@ -6,4 +6,6 @@ void displayStatus(bool);
 void getPlayerInfo(player&);
 void readLeaderBoard();
 void writeLeaderBoard(player);
-//void getBackGround(char [][41]);
+void getBG(char[][41]);
+void displayBG(char[][41], int, int);
+void getfullBG(char[][41]);

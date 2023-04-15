@@ -1,4 +1,7 @@
 #include "drawLine.h"
+#include "Utility.h"
+
+char ch[20][41];
 
 void drawIX(int y1, int y2, int x) {
     int min;
@@ -108,7 +111,16 @@ void drawU(position p1, position p2, int x, int type) {
 
         drawIX(pMin.y*10 + 2 + 5 + 3, x*10 + 2 + 5, 4*pMin.x + 2 + 2);
         drawIX(pMax.y*10 + 2 + 5 + 3, x*10 + 2 + 5, 4*pMax.x + 2 + 2);
-        drawIY(pMin.x*4 + 2 + 3, pMax.x*4 + 2 + 1, x*10 + 2 + 5);
+        int min, max;
+        if(pMin.x > pMax.x) {
+            min = pMax.x;
+            max = pMin.x;
+        }else {
+            min = pMin.x;
+            max = pMax.x;
+        }
+
+        drawIY(min*4 + 2 + 3, max*4 + 2 + 1, x*10 + 2 + 5);
 
         move(4*pMax.x + 2 + 2, pMax.y*10 + 2 + 5 + 2); 
         printw("+");
@@ -204,6 +216,8 @@ void drawL(position p1, position p2, int type) {
     init_pair(1, COLOR_WHITE, COLOR_BLACK);
     attron(COLOR_PAIR(1));
 
+    
+
     position pMax, pMin;
     if(p1.y > p2.y) {
         pMax = p1;
@@ -223,8 +237,8 @@ void drawL(position p1, position p2, int type) {
         drawI(pMin, temp);
         drawI(temp, pMax);
         attron(COLOR_PAIR(1));
-        move(4*(temp.x - 1) + 2 + 2, (temp.y - 1)*10 + 2 + 2); 
-        printw("   0");
+        move(4*(temp.x - 1) + 2 + 2, (temp.y - 1)*10 + 2 + 5); 
+        printw("0");
         move(4*(temp.x - 1) + 2 + 3,(temp.y - 1)*10 + 2 + 5);
         printw(" ");
         attroff(COLOR_PAIR(1));
@@ -250,6 +264,7 @@ void drawL(position p1, position p2, int type) {
 }
 
 void delIX(int y1, int y2, int x) {
+    getBG(ch);
     int min;
     int max;
 
@@ -261,13 +276,19 @@ void delIX(int y1, int y2, int x) {
         min = y1;
     }
 
-    move (x, min);
     for(int i = min; i <= max; i ++){
-        printw(" ");
+        move (x, i);
+        if(x >= 2  && i <= 43 && i >= 2) {
+            printw("%c", ch[x - 2][i - 2]);
+        }else {
+            printw(" ");
+        }
     }
+
 }
 
 void delIY(int x1, int x2, int y) {
+    getBG(ch);
     int min, max;
     
     if(x1 > x2) {
@@ -280,8 +301,13 @@ void delIY(int x1, int x2, int y) {
 
     for(int i = min; i <= max; i ++) {
         move (i, y);
-        printw(" ");
+        if(i >= 2  && y <= 43 && y >= 2) {
+            printw("%c", ch[i - 2][y - 2]);
+        }else {
+            printw(" ");    
+        }
     }
+
 }
 
 void delI(position p1, position p2) {
@@ -293,6 +319,7 @@ void delI(position p1, position p2) {
     p2.x --;
     p2.y --;
     position pMax, pMin;
+    getBG(ch);
 
     if(p1.x == p2.x) {
         if(p1.y > p2.y){
@@ -304,11 +331,19 @@ void delI(position p1, position p2) {
         }
 
         move(4*pMin.x + 2 + 2, pMin.y*10 + 2 + 5 + 3); 
-        printw(" ");
+        if(pMin.y*10 + 2 + 5 + 3 <= 43) {
+            printw("%c", ch[4*pMin.x + 2][pMin.y*10+ 5 + 3]);
+        }else {
+            printw(" ");
+        }
         delIX(pMin.y*10 + 2 + 5 + 4, pMax.y*10 + 2 + 1, p1.x*4 + 2 + 2);
 
-        move(4*pMax.x + 2 + 2, pMax.y*10 + 2 + 2); 
-        printw(" ");
+        move(4*pMax.x + 2 + 2, pMax.y*10 + 2 + 2);
+        if(pMax.y*10 + 2 + 2 <= 43) {
+            printw("%c", ch[4*pMax.x + 2][pMax.y*10 + 2]);
+        } else {
+            printw(" ");
+        }
 
     }else if(p1.y == p2.y) {
         if(p1.x > p2.x) {
@@ -320,12 +355,20 @@ void delI(position p1, position p2) {
         }
 
         move(4*pMin.x + 2 + 3,pMin.y*10 + 2 + 5);
-        printw(" ");
+        if(pMin.y*10 + 2 + 5 <= 43) {
+            printw("%c", ch[4*pMin.x + 3][pMin.y*10 + 5]);
+        }else {
+            printw(" ");
+        }
 
         delIY(4*pMax.x + 2, 4*pMin.x + 2 + 4, p1.y*10 + 2 + 5);
 
         move(4*pMax.x + 2 + 1, pMax.y*10 + 2 + 5);
-        printw(" ");
+        if(pMax.y*10 + 2 + 5 <= 43) {
+            printw("%c", ch[4*pMax.x + 1][pMax.y*10 + 5]);
+        }else {
+            printw(" ");
+        }
     }
 
     attroff(COLOR_PAIR(1));
@@ -335,6 +378,7 @@ void delU(position p1, position p2, int x, int type) {
     start_color();
     init_pair(1, COLOR_WHITE, COLOR_BLACK);
     attron(COLOR_PAIR(1));
+    getBG(ch);
     x--;
     p1.x --;
     p1.y --;
@@ -353,14 +397,22 @@ void delU(position p1, position p2, int x, int type) {
         }
 
         move(4*pMin.x + 2 + 2, pMin.y*10 + 2 + 5 + 2); 
-        printw(" ");
+        if(pMin.y*10 + 2 + 5 + 2 <= 43) {
+            printw("%c", ch[4*pMin.x + 2][pMin.y*10 + 2 + 5]);
+        }else {
+            printw(" ");
+        }
 
         delIX(pMin.y*10 + 2 + 5 + 3, x*10 + 2 + 5, 4*pMin.x + 2 + 2);
         delIX(pMax.y*10 + 2 + 5 + 3, x*10 + 2 + 5, 4*pMax.x + 2 + 2);
         delIY(pMin.x*4 + 2 + 3, pMax.x*4 + 2 + 1, x*10 + 2 + 5);
 
         move(4*pMax.x + 2 + 2, pMax.y*10 + 2 + 5 + 2); 
-        printw(" ");
+        if(pMax.y*10 + 2 + 5 + 2 <= 43) {
+            printw("%c", ch[4*pMax.x + 2][pMax.y*10 + 2 + 5]);
+        }else {
+            printw(" ");
+        }
 
     }else if (type == 2){
         if(p1.x > p2.x) {
@@ -372,7 +424,11 @@ void delU(position p1, position p2, int x, int type) {
         }
 
         move(4*pMin.x + 2 + 1, pMin.y*10 + 2 + 5);
-        printw(" ");
+        if(pMin.y*10 + 2 + 5 <= 43) {
+            printw("%c", ch[4*pMin.x + 1][pMin.y*10 + 5]);
+        }else {
+            printw(" ");
+        }
 
         delIY(4*pMin.x + 2, x*4 + 2 + 3, pMin.y*10 + 2 + 5);
         delIY(4*pMax.x + 2, x*4 + 2 + 3, pMax.y*10 + 2 + 5);
@@ -387,7 +443,11 @@ void delU(position p1, position p2, int x, int type) {
         delIX(min*10 + 2 + 6, max*10 + 2 + 4, x*4 + 2 + 3);
 
         move(4*pMax.x + 2 + 1, pMax.y*10 + 2 + 5);
-        printw(" ");
+        if(pMax.y*10 + 2 + 5 <= 43) {
+            printw("%c", ch[4*pMax.x + 1][pMax.y*10 + 5]);
+        }else {
+            printw (" ");
+        }
     }
 
     attroff(COLOR_PAIR(1));
@@ -397,6 +457,7 @@ void delZ(position p1, position p2, int x, int type) {
     start_color();
     init_pair(1, COLOR_WHITE, COLOR_BLACK);
     attron(COLOR_PAIR(1));
+    getBG(ch);
     x--;
     p1.x --;
     p1.y --;
@@ -417,14 +478,22 @@ void delZ(position p1, position p2, int x, int type) {
         }
 
         move(4*pMin.x + 2 + 2, pMin.y*10 + 2 + 5 + 2); 
-        printw(" ");
+        if(pMin.y*10 + 2 + 5 + 2 <= 43) {
+            printw("%c", ch[4*pMin.x + 2][pMin.y*10 + 2 + 5]);
+        }else {
+            printw(" ");
+        }
 
         delIX(pMin.y*10 + 2 + 5 + 3, x*10 + 2 + 5, 4*pMin.x + 2 + 2);
         delIY(4*pMin.x + 2 + 2, 4*pMax.x + 2 + 2, x*10 + 2 + 5);
         delIX(x*10 + 2 + 5, pMax.y*10 + 2 + 5 - 3, 4*pMax.x + 2 + 2);
 
         move(4*pMax.x + 2 + 2, pMax.y*10 + 2 + 5 - 2); 
-        printw(" ");
+        if(pMax.y*10 + 2 + 5 - 2 <= 43) {
+            printw("%c", ch[4*pMax.x + 2][pMax.y*10 + 5 - 2]);
+        }else {
+            printw(" ");
+        }
     }else if(type == 2) {
         if(p1.x > p2.x) {
             pMin = p2;
@@ -435,14 +504,22 @@ void delZ(position p1, position p2, int x, int type) {
         }
 
         move(4*pMin.x + 2 + 3, pMin.y*10 + 2 + 5);
-        printw(" ");
+        if(pMin.y*10 + 2 + 5 <= 43) {
+            printw("%c", ch[4*pMin.x + 3][pMin.y*10 + 5]);
+        }else {
+            printw(" ");
+        }
 
         delIY(4*pMin.x + 2 + 4, 4*x + 2 + 2, pMin.y*10 + 2 + 5);
         delIY(4*pMax.x + 2, 4*x + 2 + 2, pMax.y*10 + 2 + 5);
         delIX(pMin.y*10 + 2 + 5, pMax.y*10 + 2 + 5, 4*x + 2 + 2);
 
         move(4*pMax.x + 2 + 1, pMax.y*10 + 2 + 5);
-        printw(" ");
+        if(pMax.y*10 + 2 + 5 <= 43){
+            printw("ch", ch[4*pMax.x + 1][pMax.y*10 + 5]);
+        }else {
+            printw(" ");
+        }
     }
 
     attroff(COLOR_PAIR(1));
@@ -472,10 +549,19 @@ void delL(position p1, position p2, int type) {
         delI(pMin, temp);
         delI(temp, pMax);
         attron(COLOR_PAIR(1));
-        move(4*(temp.x - 1) + 2 + 2, (temp.y - 1)*10 + 2 + 2); 
-        printw("    ");
+        move(4*(temp.x - 1) + 2 + 2, (temp.y - 1)*10 + 2 + 5);
+        if((temp.y - 1)*10 + 2 + 5 <= 43) {
+            printw("%c", ch[4*(temp.x - 1) + 2][(temp.y - 1)*10 + 5]);
+        } else {
+            printw(" ");
+
+        }
         move(4*(temp.x - 1) + 2 + 3,(temp.y - 1)*10 + 2 + 5);
-        printw(" ");
+        if((temp.y - 1)*10 + 2 + 5 <= 43) {
+            printw("%c", ch[4*(temp.x - 1) + 3][(temp.y - 1)*10 + 5]);
+        }else {
+            printw(" ");
+        }
         attroff(COLOR_PAIR(1));
 
     }else {
@@ -487,10 +573,18 @@ void delL(position p1, position p2, int type) {
         delI(temp, pMax);
 
         attron(COLOR_PAIR(1));
-        move(4*(temp.x - 1) + 2 + 2, (temp.y - 1)*10 + 2 + 5 + 1); 
-        printw("   ");
+        move(4*(temp.x - 1) + 2 + 2, (temp.y - 1)*10 + 2 + 5 + 1);
+        if((temp.y - 1)*10 + 5 + 1 <= 43) {
+            printw("%c", ch[4*(temp.x - 1) + 2][(temp.y - 1)*10 + 5 + 1]);
+        } else {
+            printw(" ");
+        }
         move(4*(temp.x - 1) + 2 + 1, (temp.y - 1)*10 + 2 + 5);
-        printw(" ");
+        if((temp.y - 1)*10 + 2 + 5 <= 43) {
+            printw("%c", ch[4*(temp.x - 1)+ 1][(temp.y - 1)*10 + 5]);            
+        }else {
+            printw(" ");
+        }
 
         attroff(COLOR_PAIR(1));
     }
