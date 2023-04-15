@@ -19,7 +19,7 @@ int main() {
     int status;
     player p;
 
-    while ((status = mainMenu()) != 3) {
+    while ((status = mainMenu()) != 2) {
         switch (status)
         {
         case 0:
@@ -38,10 +38,6 @@ int main() {
 
     getch();
     clear();
-
-
-
-    // Clean up
     endwin();
     return 0;
 }

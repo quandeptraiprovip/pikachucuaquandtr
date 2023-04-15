@@ -3,6 +3,8 @@
 
 int mainMenu();
 void displayStatus(bool);
+//true == win
+//false == lose
 void getPlayerInfo(player&);
 void readLeaderBoard();
 void writeLeaderBoard(player);

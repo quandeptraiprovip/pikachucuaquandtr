@@ -2,6 +2,8 @@
 #include "struct.h"
 #include <ncurses.h>
 
+//X: horizontal
+//Y: vertical
 void drawIX(int, int, int);
 void drawIY(int, int, int);
 void drawZ(position ,position ,int, int type);

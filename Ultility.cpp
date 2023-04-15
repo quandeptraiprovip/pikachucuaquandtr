@@ -9,10 +9,10 @@ int mainMenu() {
     
     keypad(stdscr, TRUE);
     
-
-    
-
     int choice[3] = { 0,0,0 }, temp, key, curChoice = 0;
+    //choice 1:play game
+    //       2:leaderboard
+    //      3:exit
     while(1) {
 
 
@@ -147,9 +147,9 @@ void readLeaderBoard() {
 
     delete[] players;
     f.close();
-    refresh();
     getch();
-    endwin();
+    clear();
+    refresh();
 
 }
 
@@ -201,6 +201,7 @@ void writeLeaderBoard(player p) {
     fout.close();
 
     delete[] list;
+
 }
 
 void getPlayerInfo(player& p) {

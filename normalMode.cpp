@@ -39,6 +39,7 @@ void initBoard(Box1** board) {
     }
 }
 
+// print board
 void renderBoard(Box1** board) {
     for (int i = 1; i < BOARDHEIGTH + 1; i++) {
         for (int j = 1; j < BOARDWIDTH + 1; j++) {
@@ -47,6 +48,7 @@ void renderBoard(Box1** board) {
     }
 }
 
+//delete board when lose or no valid match
 void deleteBoard(Box1** board) {
     for (int i = 1; i < BOARDHEIGTH + 1; i++) {
         for (int j = 1; j < BOARDWIDTH + 1; j++) {
@@ -64,6 +66,7 @@ void deleteBoard(Box1** board) {
     delete[]board;
 }
 
+//draw match line
 void draw(position p1, position p2 ,int x) {
     if(x == 1) {
         drawI(p1, p2);
@@ -87,6 +90,7 @@ void draw(position p1, position p2 ,int x) {
     }
 }
 
+//delete match line
 void del(position p1, position p2, int x) {
     if(x == 1) {
         delI(p1, p2);
@@ -110,6 +114,7 @@ void del(position p1, position p2, int x) {
     }
 }
 
+//hint by blue block
 void hint(Box1** board) {
     char check = 'A';
     while (check >= 'A' && check <= 'Z') {
@@ -180,7 +185,7 @@ void move(Box1** board, position& pos, int& status, player& p, position selected
             board[pos.x][pos.y].isSelected = true;
             couple--;
 
-            if(couple == 0) {
+            if(couple == 0) {//khi da chon 2 o
                 if (board[selectedPos[0].x][selectedPos[0].y].c == board[selectedPos[1].x][selectedPos[1].y].c) {
                     if (allcheck(board, selectedPos[0], selectedPos[1])) {
                         int x = allcheck(board, selectedPos[0], selectedPos[1]);
@@ -477,6 +482,7 @@ void normalMode(player& p) {
     getBG(bg);
 
     Box1** board = new Box1 * [BOARDHEIGTH + 2];
+    //create board size BOARDHEIGHT+2xBOARDWIDTH+2
     initBoard(board);
 
     move(0, 2);
@@ -518,8 +524,6 @@ void normalMode(player& p) {
         board[curPosition.x][curPosition.y].isSelected = 1;
 
         renderBoard(board);
-
-
         move(board, curPosition, status, p, selectedPos, couple);
 
         if ((!checkValidPairs(board))) status = 1;

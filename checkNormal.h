@@ -1,6 +1,9 @@
 #pragma once
 #include "struct.h"
 
+//X: horizontal
+//Y: vertical
+
 //check line x from y1 to y2
 int checkLineX(Box1**, int y1, int y2, int x);
 //check column y from x1 to x2
