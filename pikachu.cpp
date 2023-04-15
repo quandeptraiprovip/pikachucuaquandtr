@@ -27,10 +27,6 @@ int main() {
             normalMode(p);
             break;
         case 1:
-            getPlayerInfo(p);
-            difficultMode(p);
-            break;
-        case 2:
             readLeaderBoard();
             break;
         default:
